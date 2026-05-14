@@ -1,0 +1,86 @@
+name: Refresh box prices (6h cron)
+
+on:
+  schedule:
+    # 매 6시간 (UTC 0:00, 6:00, 12:00, 18:00 = KST 9:00, 15:00, 21:00, 3:00)
+    - cron: '0 */6 * * *'
+  # 수동 트리거 가능
+  workflow_dispatch:
+    inputs:
+      setIds:
+        description: '특정 setId 만 갱신 (쉼표 구분, 예: sv2a,m3). 비우면 전체.'
+        required: false
+        type: string
+      forceFresh:
+        description: '메모리 캐시 무효화 (라이브 fetch 강제)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: refresh-prices
+  cancel-in-progress: false
+
+jobs:
+  revalidate:
+    name: Trigger Vercel ISR revalidation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Build payload
+        id: payload
+        run: |
+          if [ -z "${{ inputs.setIds }}" ]; then
+            PAYLOAD='{"forceFresh": ${{ inputs.forceFresh && 'true' || 'false' }}}'
+          else
+            IFS=',' read -ra IDS <<< "${{ inputs.setIds }}"
+            JSON_IDS=$(printf '"%s",' "${IDS[@]}")
+            JSON_IDS="[${JSON_IDS%,}]"
+            PAYLOAD="{\"setIds\": $JSON_IDS, \"forceFresh\": ${{ inputs.forceFresh && 'true' || 'false' }}}"
+          fi
+          echo "payload=$PAYLOAD" >> "$GITHUB_OUTPUT"
+          echo "Payload: $PAYLOAD"
+
+      - name: Call /api/revalidate
+        id: call
+        env:
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://poket-zeta.vercel.app' }}
+        run: |
+          if [ -z "$REVALIDATE_SECRET" ]; then
+            echo "❌ REVALIDATE_SECRET secret 미설정. Repository Settings → Secrets and variables → Actions 에서 추가하세요."
+            exit 1
+          fi
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$SITE_URL/api/revalidate" \
+            -H "Authorization: Bearer $REVALIDATE_SECRET" \
+            -H "Content-Type: application/json" \
+            -d '${{ steps.payload.outputs.payload }}')
+
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          STATUS=$(echo "$RESPONSE" | tail -n 1)
+
+          echo "HTTP $STATUS"
+          echo "$BODY" | head -50
+
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ Revalidation failed (HTTP $STATUS)"
+            exit 1
+          fi
+
+          # 갱신된 path 개수 추출
+          COUNT=$(echo "$BODY" | grep -oE '"revalidated":\[[^]]*\]' | grep -oE '"' | wc -l)
+          COUNT=$((COUNT / 2))
+          echo "✅ Revalidated $COUNT paths"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Refresh prices summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Triggered at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- Site: ${{ vars.SITE_URL || 'https://poket-zeta.vercel.app' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Payload: \`${{ steps.payload.outputs.payload }}\`" >> $GITHUB_STEP_SUMMARY
