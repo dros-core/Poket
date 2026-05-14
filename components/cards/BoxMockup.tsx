@@ -11,6 +11,8 @@ interface Props {
   logoUrl?: string;
   /** 실제 박스 패키지 사진 (자체 호스팅 또는 외부 URL). 있으면 합성 mockup 대신 이걸 사용 */
   boxPhotoUrl?: string;
+  /** 16×16 base64 placeholder (boxBlurPlaceholders.ts 에서 주입) — LCP 최적화 */
+  boxPhotoBlurDataURL?: string;
   width?: number;
   height?: number;
   className?: string;
@@ -25,14 +27,17 @@ interface Props {
  *   1) boxPhotoUrl이 있으면 그 이미지를 박스 사진으로 사용 (KREAM 같이 실 박스 사진)
  *   2) 없으면 합성 mockup (세트 로고 + 카드 일러스트 + 박스 외곽 디자인)
  *
- * 실 박스 사진은 자체 호스팅(public/box-images/{set-id}.jpg) 또는
+ * 실 박스 사진은 자체 호스팅(public/box-photos/{set-id}.jpg) 또는
  * 라이선스 클리어한 외부 URL을 setImageMap.boxPhotoUrl 에 매핑.
+ *
+ * blurDataURL 은 빌드 타임에 sharp 로 자동 생성 (scripts/sync-box-photos.mjs).
  */
 export function BoxMockup({
   set,
   cardImage,
   logoUrl,
   boxPhotoUrl,
+  boxPhotoBlurDataURL,
   width = 240,
   height = 320,
   className,
@@ -61,6 +66,10 @@ export function BoxMockup({
           sizes={`${width}px`}
           className="object-contain"
           priority={priority}
+          quality={75}
+          {...(boxPhotoBlurDataURL
+            ? { placeholder: "blur" as const, blurDataURL: boxPhotoBlurDataURL }
+            : {})}
         />
         {/* 부드러운 보더 글로우 */}
         <div className="absolute inset-0 pointer-events-none rounded-xl ring-1 ring-white/5" />
@@ -156,6 +165,7 @@ export function BoxMockup({
             className="object-cover"
             unoptimized={cardImage.isPlaceholder}
             priority={priority}
+            quality={75}
           />
           {/* 홀로그래픽 핫포일 sheen */}
           <div
