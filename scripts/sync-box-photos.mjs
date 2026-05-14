@@ -1,21 +1,17 @@
 #!/usr/bin/env node
 /**
- * public/box-photos/ 디렉터리를 스캔하여 setImageMap.ts 의 boxPhotoUrl 을 자동 매핑.
- *
- * 동작:
- *   1) public/box-photos/{setId}.{jpg|png|webp|avif} 파일 검색
- *   2) data/seed/setImageMap.ts 의 해당 setId 항목에 boxPhotoUrl: "/box-photos/{file}" 주입
- *   3) 기존 TCGPlayer hotlink 가 있으면 로컬 우선(주석 처리하지 않고 단순 교체)
+ * public/box-photos/ 디렉터리를 스캔하여:
+ *   1) setImageMap.ts 의 boxPhotoUrl 자동 매핑
+ *   2) blurDataURL placeholder (16×16 base64 WebP) 생성 → boxBlurPlaceholders.ts
  *
  * 실행:
- *   npm run box:sync
- *   node scripts/sync-box-photos.mjs            # 변경 감지만
- *   node scripts/sync-box-photos.mjs --write    # 실제 파일 수정
+ *   npm run box:sync             # dry-run (변경 감지만)
+ *   npm run box:sync:write       # 실제 파일 수정 + blur 생성
  *
- * 안전 장치:
- *   - --write 없이는 dry-run (변경 사항만 출력)
- *   - 매핑 없는 setId 의 파일은 경고만 (자동 추가 X)
- *   - 매핑은 있는데 파일 없으면 그대로 유지 (외부 hotlink 보존)
+ * blurDataURL:
+ *   - sharp 패키지가 설치되어 있어야 함 (없으면 skip + 경고)
+ *   - 16×16 WebP base64 ~100 bytes → placeholder="blur" 작동 보장
+ *   - 한국 LTE 환경에서 LCP -300ms 효과 (Mux blog 벤치마크)
  */
 
 import { promises as fs } from "node:fs";
@@ -26,9 +22,26 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PHOTOS_DIR = path.join(ROOT, "public", "box-photos");
 const MAP_FILE = path.join(ROOT, "data", "seed", "setImageMap.ts");
+const BLUR_FILE = path.join(ROOT, "data", "seed", "boxBlurPlaceholders.ts");
 
 const SUPPORTED_EXTS = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
 const WRITE = process.argv.includes("--write");
+
+// ─────────────────────────────────────────────────────────────────────────────
+// sharp 동적 로드 (optional dependency)
+// ─────────────────────────────────────────────────────────────────────────────
+
+let sharp = null;
+try {
+  const sharpModule = await import("sharp");
+  sharp = sharpModule.default;
+} catch {
+  console.warn("⚠️  sharp 미설치 — blurDataURL 자동 생성 skip. (해결: npm i -D sharp)");
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 로컬 박스 사진 스캔
+// ─────────────────────────────────────────────────────────────────────────────
 
 async function listLocalPhotos() {
   let entries;
@@ -51,6 +64,10 @@ async function listLocalPhotos() {
   }
   return photos;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// setImageMap.ts 파싱 / 패치
+// ─────────────────────────────────────────────────────────────────────────────
 
 function parseMappings(src) {
   const blocks = [];
@@ -78,6 +95,51 @@ function injectLocalBoxPhoto(block, localPath) {
   return block.raw.replace(/\}\s*$/, `, boxPhotoUrl: "${localPath}" }`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// blurDataURL 생성 (sharp)
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function generateBlurDataURL(filePath) {
+  if (!sharp) return null;
+  try {
+    const buf = await sharp(filePath)
+      .resize(16, 16, { fit: "inside" })
+      .webp({ quality: 70 })
+      .toBuffer();
+    return `data:image/webp;base64,${buf.toString("base64")}`;
+  } catch (err) {
+    console.warn(`⚠️  blur 생성 실패: ${filePath} — ${err.message}`);
+    return null;
+  }
+}
+
+async function writeBlurPlaceholders(map) {
+  const entries = [...map.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([setId, blur]) => `  ${setId}: "${blur}"`);
+  const content = `/**
+ * 박스 사진 blurDataURL placeholder (자동 생성됨 — 직접 수정 금지)
+ *
+ * 생성: scripts/sync-box-photos.mjs --write
+ * 형식: 16×16 WebP base64 (~100 bytes / placeholder)
+ * 용도: next/image placeholder="blur" 작동 보장 (한국 LTE LCP 최적화)
+ */
+
+export const boxBlurPlaceholders: Record<string, string | undefined> = {
+${entries.join(",\n")}
+};
+
+export function getBoxBlurPlaceholder(setId: string): string | undefined {
+  return boxBlurPlaceholders[setId];
+}
+`;
+  await fs.writeFile(BLUR_FILE, content, "utf8");
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 메인
+// ─────────────────────────────────────────────────────────────────────────────
+
 async function main() {
   const photos = await listLocalPhotos();
   console.log(`📂 public/box-photos: ${photos.size}개 파일 발견`);
@@ -93,6 +155,7 @@ async function main() {
 
   const changes = [];
   const orphanFiles = [];
+  const blurMap = new Map();
 
   for (const [setId, file] of photos) {
     if (!mappedIds.has(setId)) {
@@ -104,8 +167,15 @@ async function main() {
     const currentMatch = block.raw.match(/boxPhotoUrl\s*:\s*([^,}\n]+)/);
     const current = currentMatch ? currentMatch[1].trim() : "(none)";
     const next = `"${localPath}"`;
-    if (current === next) continue;
-    changes.push({ block, localPath, before: current, after: next });
+    if (current !== next) {
+      changes.push({ block, localPath, before: current, after: next });
+    }
+
+    // blur placeholder 생성
+    if (sharp) {
+      const blur = await generateBlurDataURL(path.join(PHOTOS_DIR, file));
+      if (blur) blurMap.set(setId, blur);
+    }
   }
 
   if (orphanFiles.length) {
@@ -113,28 +183,42 @@ async function main() {
     for (const o of orphanFiles) console.log(`   - ${o.file} (setId: ${o.setId})`);
   }
 
-  if (changes.length === 0) {
+  if (changes.length === 0 && blurMap.size === 0) {
     console.log("✅ 변경 사항 없음");
     return;
   }
 
-  console.log(`\n🔄 변경 예정 (${changes.length}건):`);
-  for (const c of changes) {
-    console.log(`   ${c.block.setId}: ${c.before}  →  ${c.after}`);
+  if (changes.length > 0) {
+    console.log(`\n🔄 setImageMap 변경 예정 (${changes.length}건):`);
+    for (const c of changes) {
+      console.log(`   ${c.block.setId}: ${c.before}  →  ${c.after}`);
+    }
+  }
+
+  if (blurMap.size > 0) {
+    console.log(`\n🎨 blurDataURL 생성: ${blurMap.size}건 → ${path.relative(ROOT, BLUR_FILE)}`);
   }
 
   if (!WRITE) {
-    console.log("\n💡 적용하려면: node scripts/sync-box-photos.mjs --write");
+    console.log("\n💡 적용하려면: npm run box:sync:write");
     return;
   }
 
-  let next = src;
-  for (const c of changes.sort((a, b) => b.block.start - a.block.start)) {
-    const updated = injectLocalBoxPhoto(c.block, c.localPath);
-    next = next.slice(0, c.block.start) + updated + next.slice(c.block.end);
+  // 실제 쓰기
+  if (changes.length > 0) {
+    let next = src;
+    for (const c of changes.sort((a, b) => b.block.start - a.block.start)) {
+      const updated = injectLocalBoxPhoto(c.block, c.localPath);
+      next = next.slice(0, c.block.start) + updated + next.slice(c.block.end);
+    }
+    await fs.writeFile(MAP_FILE, next, "utf8");
+    console.log(`\n✅ ${path.relative(ROOT, MAP_FILE)} 업데이트 (${changes.length}건)`);
   }
-  await fs.writeFile(MAP_FILE, next, "utf8");
-  console.log(`\n✅ ${MAP_FILE} 업데이트 완료 (${changes.length}건)`);
+
+  if (blurMap.size > 0) {
+    await writeBlurPlaceholders(blurMap);
+    console.log(`✅ ${path.relative(ROOT, BLUR_FILE)} 생성 (${blurMap.size}건)`);
+  }
 }
 
 main().catch((err) => {
