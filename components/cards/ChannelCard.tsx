@@ -1,7 +1,9 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { CheckCircle2, ExternalLink, Star, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import type { PurchaseChannel } from "@/lib/types";
-import { CheckCircle2, ExternalLink, Star, XCircle } from "lucide-react";
-import { formatPct } from "@/lib/format";
 
 const typeLabels: Record<PurchaseChannel["type"], { label: string; variant: any }> = {
   WHOLESALE: { label: "도매", variant: "primary" },
@@ -14,55 +16,60 @@ const typeLabels: Record<PurchaseChannel["type"], { label: string; variant: any 
 export function ChannelCard({ channel }: { channel: PurchaseChannel }) {
   const t = typeLabels[channel.type];
   return (
-    <div className="card flex flex-col gap-3">
+    <motion.div
+      whileHover={{ y: -2 }}
+      transition={{ type: "spring", stiffness: 400, damping: 28 }}
+      className="card card-hover flex flex-col gap-3 h-full"
+    >
       <div className="flex items-start justify-between gap-2">
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="font-bold">{channel.name}</h3>
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="font-bold leading-tight">{channel.name}</h3>
             <Badge variant={t.variant}>{t.label}</Badge>
           </div>
-          {channel.region && (
-            <div className="text-xs text-ink-muted mt-0.5">{channel.region}</div>
-          )}
+          {channel.region && <div className="text-2xs text-[var(--fg-muted)] mt-0.5">{channel.region}</div>}
         </div>
-        <div className="flex items-center gap-0.5 text-amber-500">
+        <div className="flex items-center gap-0.5 text-amber-500 shrink-0" aria-label={`신뢰도 ${channel.trustScore} / 5`}>
           {Array.from({ length: 5 }).map((_, i) => (
             <Star
               key={i}
-              size={14}
-              className={i < channel.trustScore ? "fill-amber-500" : "opacity-30"}
+              size={12}
+              className={i < channel.trustScore ? "fill-amber-500" : "opacity-25"}
             />
           ))}
         </div>
       </div>
-      <p className="text-sm text-ink-muted leading-relaxed">{channel.description}</p>
 
-      <div className="grid grid-cols-2 gap-3 text-xs">
-        <div>
-          <div className="font-semibold text-emerald-600 mb-1 inline-flex items-center gap-1">
-            <CheckCircle2 size={12} /> 장점
+      <p className="text-sm text-[var(--fg-muted)] leading-relaxed line-clamp-3">{channel.description}</p>
+
+      <div className="grid grid-cols-2 gap-2.5 text-xs">
+        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/30 p-2.5">
+          <div className="font-semibold text-emerald-700 dark:text-emerald-300 mb-1 inline-flex items-center gap-1 text-2xs uppercase tracking-wider">
+            <CheckCircle2 size={11} strokeWidth={2.5} /> 장점
           </div>
-          <ul className="space-y-0.5 text-ink-muted">
+          <ul className="space-y-0.5 text-emerald-900/80 dark:text-emerald-100/70">
             {channel.pros.slice(0, 3).map((p) => (
-              <li key={p}>· {p}</li>
+              <li key={p} className="line-clamp-1">· {p}</li>
             ))}
           </ul>
         </div>
-        <div>
-          <div className="font-semibold text-rose-600 mb-1 inline-flex items-center gap-1">
-            <XCircle size={12} /> 단점
+        <div className="rounded-lg bg-rose-50 dark:bg-rose-950/30 p-2.5">
+          <div className="font-semibold text-rose-700 dark:text-rose-300 mb-1 inline-flex items-center gap-1 text-2xs uppercase tracking-wider">
+            <XCircle size={11} strokeWidth={2.5} /> 단점
           </div>
-          <ul className="space-y-0.5 text-ink-muted">
+          <ul className="space-y-0.5 text-rose-900/80 dark:text-rose-100/70">
             {channel.cons.slice(0, 3).map((c) => (
-              <li key={c}>· {c}</li>
+              <li key={c} className="line-clamp-1">· {c}</li>
             ))}
           </ul>
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-[var(--border)] text-xs">
-        <div className="text-ink-muted">
-          {channel.averageMarginPct ? `예상 마진 ${formatPct(channel.averageMarginPct)}` : "정가 판매"}
+      <div className="mt-auto flex items-center justify-between pt-3 border-t border-[var(--border)] text-xs">
+        <div className="text-[var(--fg-muted)]">
+          {channel.averageMarginPct
+            ? `예상 마진 ${channel.averageMarginPct >= 0 ? "+" : ""}${channel.averageMarginPct}%`
+            : "정가 판매"}
           {channel.minOrderQty ? ` · 최소 ${channel.minOrderQty}박스` : ""}
         </div>
         {channel.url && (
@@ -70,12 +77,12 @@ export function ChannelCard({ channel }: { channel: PurchaseChannel }) {
             href={channel.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-brand-600 hover:underline"
+            className="inline-flex items-center gap-1 text-brand-600 hover:text-brand-700 font-semibold transition-colors"
           >
-            방문 <ExternalLink size={12} />
+            방문 <ExternalLink size={11} />
           </a>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

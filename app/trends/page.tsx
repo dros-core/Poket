@@ -1,14 +1,15 @@
 import Link from "next/link";
-import { Stat } from "@/components/ui/Stat";
-import { Badge } from "@/components/ui/Badge";
+import { TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
+import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
+import { TrendsTable, type TrendRow } from "@/components/tables/TrendsTable";
 import { repository } from "@/lib/data/repository";
-import { formatPct, formatPrice } from "@/lib/format";
+import { formatPct } from "@/lib/format";
 
 export const metadata = { title: "시세 추이 분석 | Poket" };
 
 export default function TrendsPage() {
   const sets = repository.listSets();
-  const rows = sets
+  const rows: TrendRow[] = sets
     .map((s) => {
       const history = repository.getBoxPriceHistory(s.id, 365);
       if (history.length < 4) return null;
@@ -22,128 +23,85 @@ export default function TrendsPage() {
         msrp: s.msrpKRW,
         change30d: ((latest - m1) / m1) * 100,
         change90d: ((latest - m3) / m3) * 100,
-        sinceLaunch: ((latest - launch) / launch) * 100
+        sinceLaunch: ((latest - launch) / launch) * 100,
+        spark: history.slice(-12).map((h) => h.avg)
       };
     })
-    .filter(Boolean) as Array<{
-    set: any;
-    latest: number;
-    msrp: number;
-    change30d: number;
-    change90d: number;
-    sinceLaunch: number;
-  }>;
+    .filter(Boolean) as TrendRow[];
 
   rows.sort((a, b) => b.change30d - a.change30d);
-
   const topGainers = rows.slice(0, 3);
   const topLosers = [...rows].reverse().slice(0, 3);
 
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="text-2xl font-bold">시세 추이</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          한국 정식 발매 박스의 30일/90일/누적 변동률. 정가 대비 프리미엄과 절판 효과를 한눈에 확인합니다.
-        </p>
-      </header>
+      <Reveal>
+        <header>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-100/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-3">
+            <BarChart3 size={12} strokeWidth={2.5} />
+            시세 추이
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">시세 추이 분석</h1>
+          <p className="mt-3 text-sm sm:text-base text-[var(--fg-muted)] max-w-3xl leading-relaxed">
+            한국 정식 발매 박스의 30일/90일/누적 변동률. 정가 대비 프리미엄과 절판 효과를 한눈에 확인합니다.
+          </p>
+        </header>
+      </Reveal>
 
-      <section className="grid sm:grid-cols-2 gap-3">
-        <div className="card">
-          <h2 className="font-bold mb-3">30일 상승 Top</h2>
-          <ul className="space-y-2">
-            {topGainers.map((r) => (
-              <li key={r.set.id} className="flex items-center justify-between text-sm">
-                <Link href={`/cards/${r.set.id}`} className="font-medium hover:underline truncate">
-                  {r.set.nameKo}
-                </Link>
-                <Badge variant="danger">{formatPct(r.change30d)}</Badge>
-              </li>
-            ))}
+      <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <StaggerItem>
+          <Movers title="30일 상승 Top" tone="up" rows={topGainers} icon={<TrendingUp size={16} strokeWidth={2.5} />} />
+        </StaggerItem>
+        <StaggerItem>
+          <Movers title="30일 하락 Top" tone="down" rows={topLosers} icon={<TrendingDown size={16} strokeWidth={2.5} />} />
+        </StaggerItem>
+      </StaggerGroup>
+
+      <Reveal>
+        <TrendsTable rows={rows} />
+      </Reveal>
+
+      <Reveal>
+        <section className="card text-sm text-[var(--fg-muted)] leading-relaxed">
+          <h2 className="font-bold text-base text-[var(--fg)] mb-3">📖 해석 가이드</h2>
+          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
+            <li>• 정가 대비 +20%↑ → 절판 임박 또는 메타 영향. 매수 신중</li>
+            <li>• 30일 +8%↑ → 단기 모멘텀. 추세 추종 가능 (익절선 필수)</li>
+            <li>• 30일 -8%↓ → 신상 안정화 진행 중. 추가 하락 가능</li>
+            <li>• 누적 +50%↑ → 절판 후 재상승. PSA 그레이딩 검토</li>
           </ul>
-        </div>
-        <div className="card">
-          <h2 className="font-bold mb-3">30일 하락 Top</h2>
-          <ul className="space-y-2">
-            {topLosers.map((r) => (
-              <li key={r.set.id} className="flex items-center justify-between text-sm">
-                <Link href={`/cards/${r.set.id}`} className="font-medium hover:underline truncate">
-                  {r.set.nameKo}
-                </Link>
-                <Badge variant="info">{formatPct(r.change30d)}</Badge>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+        </section>
+      </Reveal>
+    </div>
+  );
+}
 
-      <section className="card p-0 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[var(--surface-muted)] text-xs uppercase text-ink-muted">
-              <tr>
-                <th className="text-left px-4 py-2">세트</th>
-                <th className="text-right px-4 py-2">정가</th>
-                <th className="text-right px-4 py-2">현재가</th>
-                <th className="text-right px-4 py-2">정가대비</th>
-                <th className="text-right px-4 py-2">30일</th>
-                <th className="text-right px-4 py-2">90일</th>
-                <th className="text-right px-4 py-2">누적</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.set.id} className="border-t border-[var(--border)]">
-                  <td className="px-4 py-2">
-                    <Link href={`/cards/${r.set.id}`} className="font-medium hover:underline">
-                      {r.set.nameKo}
-                    </Link>
-                    <div className="text-xs text-ink-muted">{r.set.code} · {r.set.series}</div>
-                  </td>
-                  <td className="px-4 py-2 text-right tabular-nums">{formatPrice(r.msrp)}</td>
-                  <td className="px-4 py-2 text-right font-bold tabular-nums">
-                    {formatPrice(r.latest)}
-                  </td>
-                  <td className="px-4 py-2 text-right">
-                    <span
-                      className={
-                        r.latest > r.msrp ? "text-rose-600" : "text-emerald-600"
-                      }
-                    >
-                      {formatPct(((r.latest - r.msrp) / r.msrp) * 100)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-right">
-                    <span className={r.change30d > 0 ? "text-rose-600" : "text-emerald-600"}>
-                      {formatPct(r.change30d)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-right">
-                    <span className={r.change90d > 0 ? "text-rose-600" : "text-emerald-600"}>
-                      {formatPct(r.change90d)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-right">
-                    <span className={r.sinceLaunch > 0 ? "text-rose-600" : "text-emerald-600"}>
-                      {formatPct(r.sinceLaunch)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+function Movers({ title, tone, rows, icon }: { title: string; tone: "up" | "down"; rows: TrendRow[]; icon: React.ReactNode }) {
+  return (
+    <div className="card h-full">
+      <div className="flex items-center gap-2 mb-3">
+        <div
+          className={`w-7 h-7 rounded-lg grid place-items-center ${tone === "up" ? "bg-up text-up" : "bg-down text-down"}`}
+        >
+          {icon}
         </div>
-      </section>
-
-      <section className="card text-sm leading-relaxed text-ink-muted">
-        <h2 className="font-bold text-base text-[var(--fg)] mb-2">해석 가이드</h2>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>정가 대비 +20% 이상 → 절판 임박 또는 메타 카드 영향 가능. 매수 신중.</li>
-          <li>30일 변동 +8% 이상 → 단기 모멘텀. 추세 추종 매수 가능 (단, 익절 라인 설정 필수).</li>
-          <li>30일 변동 -8% 이상 → 신상 발매 후 안정화 진행 중. 추가 하락 가능성.</li>
-          <li>누적 +50% 이상 → 절판 후 재상승. PSA 그레이딩 후 판매 검토.</li>
-        </ul>
-      </section>
+        <h3 className="font-bold">{title}</h3>
+      </div>
+      <ul className="space-y-2">
+        {rows.map((r) => (
+          <li key={r.set.id} className="flex items-center justify-between gap-2 text-sm">
+            <Link
+              href={`/cards/${r.set.id}`}
+              className="font-medium hover:text-brand-600 transition-colors truncate"
+            >
+              {r.set.nameKo}
+            </Link>
+            <span className={`font-bold tnum text-sm shrink-0 ${tone === "up" ? "text-up" : "text-down"}`}>
+              {formatPct(r.change30d)}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
