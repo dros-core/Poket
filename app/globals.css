@@ -211,6 +211,13 @@ body::before {
   background-size: 160px 160px;
 }
 
+/* 카드 페이지 hero 배너용 포켓몬 모티프 백드롭 */
+.bg-card-hero {
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(255, 203, 5, 0.10), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 70%, rgba(238, 21, 21, 0.06), transparent 70%);
+}
+
 /* === Spotlight 효과 (마우스 추적) === */
 .spotlight {
   position: relative;

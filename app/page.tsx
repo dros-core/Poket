@@ -5,6 +5,7 @@ import { Hero } from "@/components/layout/Hero";
 import { SetCard } from "@/components/cards/SetCard";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
 import { ArbitrageTable } from "@/components/tables/ArbitrageTable";
+import { FeaturedCardShowcase } from "@/components/cards/FeaturedCardShowcase";
 import { repository } from "@/lib/data/repository";
 import { resolveSetImage } from "@/lib/data/imageResolver";
 import { formatPct, formatPrice } from "@/lib/format";
@@ -34,9 +35,45 @@ export default function HomePage() {
     { label: "Top Net", value: arbitrage.length > 0 ? formatPrice(arbitrage[0].estimatedNetProfit) : "—", up: true }
   ];
 
+  // Featured showcase 데이터 — 최근 인기 4개 (가격 변화율 기준)
+  const showcaseItems = featuredSets.slice(0, 4).map((s) => {
+    const history = repository.getBoxPriceHistory(s.id, 30);
+    const latest = history[history.length - 1]?.avg ?? s.msrpKRW;
+    const prev = history[Math.max(0, history.length - 5)]?.avg ?? latest;
+    return {
+      set: s,
+      image: resolveSetImage(s),
+      latestPrice: latest,
+      changePct: prev ? ((latest - prev) / prev) * 100 : 0
+    };
+  });
+
   return (
     <div className="space-y-16 sm:space-y-24">
       <Hero featuredImages={heroImages} ticker={ticker} />
+
+      {/* Featured Card Showcase — 큰 카드 디스플레이 */}
+      <section>
+        <Reveal>
+          <div className="flex items-end justify-between mb-6 gap-2 flex-wrap">
+            <SectionHeader
+              eyebrow="FEATURED · 최근 핫픽"
+              title="이 주의 주목할 박스"
+              description="발매 직후 프리미엄이 형성된 세트들"
+            />
+            <Link
+              href="/cards"
+              className="text-sm text-[var(--fg-muted)] hover:text-[var(--accent)] inline-flex items-center gap-1 group transition-colors"
+            >
+              전체 마켓
+              <ArrowUpRight size={14} strokeWidth={1.8} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </Link>
+          </div>
+        </Reveal>
+        <Reveal>
+          <FeaturedCardShowcase items={showcaseItems} />
+        </Reveal>
+      </section>
 
       {/* Market Pulse */}
       <section>

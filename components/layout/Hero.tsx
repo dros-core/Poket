@@ -3,15 +3,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Sparkles } from "lucide-react";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { BorderBeam } from "@/components/ui/BorderBeam";
 import { Marquee } from "@/components/ui/Marquee";
+import { PokeballOutline } from "@/components/brand/PokeballLogo";
+import { ENERGY_TYPES } from "@/components/brand/EnergyIcons";
 import type { ResolvedImage } from "@/lib/data/imageResolver";
 
 interface Props {
+  /** 카드 컬렉션 — 첫 번째가 메인 hero 카드 */
   featuredImages?: ResolvedImage[];
-  /** 상단 KPI ticker용 데이터 */
   ticker?: Array<{ label: string; value: string; delta?: string; up?: boolean }>;
 }
 
@@ -26,90 +28,153 @@ const dataSources = [
 ];
 
 export function Hero({ featuredImages = [], ticker = [] }: Props) {
-  return (
-    <Spotlight className="rounded-3xl border border-[var(--border)] bg-[var(--bg-card)] relative">
-      {/* 럭셔리 보더 글로우 */}
-      <BorderBeam size={120} duration={12} colorFrom="#C69B3C" colorTo="#FFCB05" />
-      <section className="relative isolate overflow-hidden rounded-3xl">
-        {/* 1. 백드롭: 미세 그리드 + 오로라 + 노이즈 */}
-        <div className="absolute inset-0 bg-grid-luxe" aria-hidden />
-        <div className="absolute inset-0 bg-aurora opacity-50" aria-hidden />
-        <div className="absolute inset-0 bg-pokeball-luxe opacity-30" aria-hidden />
+  const mainCard = featuredImages[0];
+  const sideCards = featuredImages.slice(1, 3);
 
-        {/* 2. 측면 글로우 (subtle) */}
+  return (
+    <Spotlight className="relative rounded-3xl border border-[var(--border)] bg-[var(--bg-card)]" color="rgba(255, 203, 5, 0.10)" size={800}>
+      <BorderBeam size={140} duration={14} colorFrom="#C69B3C" colorTo="#FFCB05" />
+
+      <section className="relative isolate overflow-hidden rounded-3xl">
+        {/* 1. 백드롭 그라데이션 */}
+        <div className="absolute inset-0 bg-grid-luxe opacity-50" aria-hidden />
+        <div className="absolute inset-0 bg-aurora opacity-60" aria-hidden />
+
+        {/* 2. 거대 글로우 halo (메인 카드 뒤) */}
         <div
-          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full opacity-25 pointer-events-none"
+          className="absolute top-1/2 right-[10%] -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none opacity-50 hidden md:block"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(255, 203, 5, 0.25), rgba(238, 21, 21, 0.10) 40%, transparent 70%)"
+              "radial-gradient(circle, rgba(255, 203, 5, 0.20) 0%, rgba(238, 21, 21, 0.10) 30%, transparent 60%)",
+            filter: "blur(40px)"
           }}
           aria-hidden
         />
 
-        {/* 3. 우측 거대 카드 컬렉션 (스택) — md+ */}
-        {featuredImages.length >= 3 && (
-          <div className="absolute right-0 top-0 bottom-0 hidden md:flex items-center justify-end pr-8 lg:pr-12 pointer-events-none w-[42%] lg:w-[40%]">
-            <div className="relative h-[420px] w-full">
-              {featuredImages.slice(0, 3).map((img, i) => {
-                const positions = [
-                  { x: "-25%", y: "8%", rot: -8, z: 1, scale: 0.88, opacity: 0.4, blur: "2px" },
-                  { x: "0%",   y: "-2%", rot: -3, z: 2, scale: 0.95, opacity: 0.75, blur: "0px" },
-                  { x: "28%",  y: "12%", rot: 6, z: 3, scale: 1.0, opacity: 1.0, blur: "0px" }
-                ][i];
+        {/* 3. 부유하는 에너지 심볼 — 미세하게 */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+          {ENERGY_TYPES.slice(0, 6).map((t, i) => {
+            const positions = [
+              { left: "5%", top: "15%", delay: 0 },
+              { left: "92%", top: "70%", delay: 1 },
+              { left: "8%", top: "70%", delay: 2 },
+              { left: "45%", top: "8%", delay: 1.5 },
+              { left: "55%", top: "85%", delay: 0.5 },
+              { left: "85%", top: "12%", delay: 2.5 }
+            ][i];
+            return (
+              <motion.div
+                key={t.label}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 0.10, scale: 1 }}
+                transition={{ delay: 0.8 + positions.delay * 0.2, duration: 1.2 }}
+                className="absolute float-slow"
+                style={{
+                  left: positions.left,
+                  top: positions.top,
+                  color: t.color,
+                  animationDelay: `${positions.delay}s`
+                }}
+              >
+                <t.Icon size={i % 2 === 0 ? 48 : 32} />
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* 4. 우측 메인 카드 디스플레이 */}
+        {mainCard && (
+          <div className="absolute right-0 top-0 bottom-0 hidden md:flex items-center justify-end pr-8 lg:pr-14 pointer-events-none w-[48%] lg:w-[46%]">
+            <div className="relative w-full h-[480px]">
+              {/* 사이드 카드 (블러, 회전) */}
+              {sideCards.map((img, i) => {
+                const isLeft = i === 0;
                 return (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 60, rotate: 0, scale: 0.8 }}
+                    initial={{ opacity: 0, y: 60, rotate: 0, x: 0 }}
                     animate={{
-                      opacity: positions.opacity,
+                      opacity: 0.55,
                       y: 0,
-                      rotate: positions.rot,
-                      scale: positions.scale
+                      rotate: isLeft ? -12 : 12,
+                      x: isLeft ? -110 : 110
                     }}
-                    transition={{
-                      delay: 0.5 + i * 0.15,
-                      duration: 1.1,
-                      ease: [0.32, 0.72, 0, 1]
-                    }}
-                    className="absolute top-1/2 left-1/2 will-change-transform"
-                    style={{
-                      transform: `translate(-50%, -50%) translateX(${positions.x}) translateY(${positions.y})`,
-                      zIndex: positions.z,
-                      filter: `blur(${positions.blur})`
-                    }}
+                    transition={{ delay: 0.5 + i * 0.15, duration: 1.2, ease: [0.32, 0.72, 0, 1] }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+                    style={{ zIndex: 1, filter: "blur(2px) brightness(0.7)" }}
                   >
-                    <div className="relative w-[180px] h-[252px] lg:w-[220px] lg:h-[308px] rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-cardLg">
+                    <div className="relative w-[200px] h-[280px] rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-cardLg">
                       <Image
                         src={img.url}
                         alt={img.alt}
                         fill
-                        sizes="(min-width: 1024px) 220px, 180px"
+                        sizes="200px"
                         className="object-cover"
                         unoptimized={img.isPlaceholder}
-                        priority={i === 2}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                     </div>
                   </motion.div>
                 );
               })}
-              {/* 하단 빛 (카드 하단에 글로우) */}
-              <div
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[280px] h-[80px] opacity-50 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at center, rgba(255, 203, 5, 0.3), transparent 70%)",
-                  filter: "blur(20px)"
-                }}
-                aria-hidden
-              />
+
+              {/* 메인 카드 (도미넌트) */}
+              <motion.div
+                initial={{ opacity: 0, y: 80, scale: 0.85, rotate: 0 }}
+                animate={{ opacity: 1, y: 0, scale: 1, rotate: -3 }}
+                transition={{ delay: 0.3, duration: 1.4, ease: [0.32, 0.72, 0, 1] }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+                style={{ zIndex: 3 }}
+              >
+                {/* 카드 글로우 halo */}
+                <div
+                  className="absolute -inset-12 rounded-full opacity-60 pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(255, 203, 5, 0.35) 0%, rgba(238, 21, 21, 0.15) 40%, transparent 70%)",
+                    filter: "blur(30px)"
+                  }}
+                  aria-hidden
+                />
+                {/* 회전 광선 (Linear style border beam) */}
+                <div className="relative rounded-2xl overflow-hidden ring-2 ring-yellow-400/30 shadow-[0_30px_80px_rgba(0,0,0,0.6),0_0_40px_rgba(255,203,5,0.25)]">
+                  <Image
+                    src={mainCard.url}
+                    alt={mainCard.alt}
+                    width={280}
+                    height={392}
+                    className="block"
+                    unoptimized={mainCard.isPlaceholder}
+                    priority
+                  />
+                  {/* 홀로그래픽 오버레이 */}
+                  <div
+                    className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-50"
+                    style={{
+                      background:
+                        "conic-gradient(from 0deg at 50% 50%, rgba(255,80,130,0.25), rgba(255,180,50,0.25), rgba(255,230,100,0.25), rgba(100,230,200,0.25), rgba(100,200,255,0.25), rgba(180,100,255,0.25), rgba(255,80,130,0.25))"
+                    }}
+                  />
+                  {/* 하단 페이드 */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                </div>
+              </motion.div>
+
+              {/* 작은 부유 포켓볼 (장식) */}
+              <motion.div
+                initial={{ opacity: 0, rotate: -20 }}
+                animate={{ opacity: 0.15, rotate: 0 }}
+                transition={{ delay: 1.4, duration: 1 }}
+                className="absolute top-4 right-4 text-pkm-yellow/30 spin-slow"
+              >
+                <PokeballOutline size={48} />
+              </motion.div>
             </div>
           </div>
         )}
 
-        {/* 4. 메인 콘텐츠 */}
-        <div className="relative z-10 px-6 sm:px-10 lg:px-14 py-16 sm:py-24 lg:py-28 max-w-[640px]">
-          {/* Eyebrow — Live indicator */}
+        {/* 5. 메인 콘텐츠 */}
+        <div className="relative z-10 px-6 sm:px-10 lg:px-14 py-12 sm:py-20 lg:py-24 max-w-full md:max-w-[600px]">
+          {/* Live chip */}
           <motion.div initial="hidden" animate="show" variants={luxeFadeUp}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border)] bg-[var(--bg-mute)]/60 backdrop-blur-sm">
               <span className="relative flex w-1.5 h-1.5">
@@ -122,13 +187,13 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
             </div>
           </motion.div>
 
-          {/* 헤드라인 — 절제된 럭셔리 */}
+          {/* 헤드라인 */}
           <motion.h1
             initial="hidden"
             animate="show"
             variants={luxeFadeUp}
             transition={{ delay: 0.08 }}
-            className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[0.98] text-[var(--fg)]"
+            className="mt-6 font-display text-[2.75rem] leading-[1] sm:text-6xl lg:text-7xl tracking-tight text-[var(--fg)]"
           >
             한국 포켓몬 카드,
             <br />
@@ -146,6 +211,46 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
             KREAM · 너정다 · TCGBOX · 번개장터 · Mercari를 하나의 데이터 레이어로.
             <span className="text-[var(--fg-soft)]"> 박스 EV, 90일 예측, 채널간 차익 기회</span>까지 — 매수·매도 의사결정의 전 영역.
           </motion.p>
+
+          {/* 모바일 메인 카드 */}
+          {mainCard && (
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.4, duration: 1, ease: [0.32, 0.72, 0, 1] }}
+              className="md:hidden mt-8 flex justify-center"
+            >
+              <div className="relative">
+                <div
+                  className="absolute -inset-8 rounded-full opacity-50 pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(255, 203, 5, 0.35) 0%, rgba(238, 21, 21, 0.15) 40%, transparent 70%)",
+                    filter: "blur(20px)"
+                  }}
+                  aria-hidden
+                />
+                <div className="relative rounded-2xl overflow-hidden ring-2 ring-yellow-400/30 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_30px_rgba(255,203,5,0.25)]">
+                  <Image
+                    src={mainCard.url}
+                    alt={mainCard.alt}
+                    width={220}
+                    height={308}
+                    className="block"
+                    unoptimized={mainCard.isPlaceholder}
+                    priority
+                  />
+                  <div
+                    className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-50"
+                    style={{
+                      background:
+                        "conic-gradient(from 0deg at 50% 50%, rgba(255,80,130,0.25), rgba(255,180,50,0.25), rgba(255,230,100,0.25), rgba(100,230,200,0.25), rgba(100,200,255,0.25), rgba(180,100,255,0.25), rgba(255,80,130,0.25))"
+                    }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* CTA */}
           <motion.div
@@ -171,27 +276,9 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
               <ArrowUpRight size={14} strokeWidth={2.2} />
             </Link>
           </motion.div>
-
         </div>
 
-        {/* Data source marquee (StockX trust strip) */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="relative z-10 border-t border-[var(--border)] py-3"
-        >
-          <Marquee duration="50s" pauseOnHover className="text-[10px] tracking-[0.2em] uppercase text-[var(--fg-faint)] font-mono">
-            {dataSources.map((src) => (
-              <span key={src} className="inline-flex items-center gap-3">
-                <span>{src}</span>
-                <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
-              </span>
-            ))}
-          </Marquee>
-        </motion.div>
-
-        {/* 5. 하단 KPI Ticker (StockX 스타일) */}
+        {/* 6. KPI Ticker */}
         {ticker.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -225,6 +312,23 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
             </div>
           </motion.div>
         )}
+
+        {/* 7. Data source marquee */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+          className="relative z-10 border-t border-[var(--border)] py-3"
+        >
+          <Marquee duration="50s" pauseOnHover className="text-[10px] tracking-[0.2em] uppercase text-[var(--fg-faint)] font-mono">
+            {dataSources.map((src) => (
+              <span key={src} className="inline-flex items-center gap-3">
+                <span>{src}</span>
+                <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+              </span>
+            ))}
+          </Marquee>
+        </motion.div>
       </section>
     </Spotlight>
   );

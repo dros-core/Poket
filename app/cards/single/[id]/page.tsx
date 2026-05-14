@@ -23,32 +23,74 @@ export default function SingleCardPage({ params }: { params: { id: string } }) {
   const prev = history[Math.max(0, history.length - 5)]?.avg ?? latest;
   const change = prev ? ((latest - prev) / prev) * 100 : 0;
 
+  const cardImage = resolveCardImage(card, set);
+
   return (
     <div className="space-y-8">
-      <Link href={`/cards/${card.setId}`} className="inline-flex items-center gap-1 text-sm text-ink-muted hover:underline">
+      <Link href={`/cards/${card.setId}`} className="inline-flex items-center gap-1 text-sm text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">
         <ArrowLeft size={14} /> {set?.nameKo ?? "세트"}로 돌아가기
       </Link>
-      <header className="flex flex-wrap items-start gap-6">
-        <CardImage image={resolveCardImage(card, set)} variant="card" width={220} height={308} priority />
-        <div className="flex-1 min-w-0">
-          <div className="text-sm text-ink-muted">
-            <Link href={`/cards/${card.setId}`} className="hover:underline">{set?.nameKo}</Link>
-            {" · "}
-            {card.number}
+
+      {/* Hero — 큰 카드 + 정보 */}
+      <header className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--bg-card)] bg-card-hero">
+        {/* 백드롭: 큰 카드 이미지 블러 */}
+        <div className="absolute inset-0 opacity-30">
+          <CardImage image={cardImage} variant="card" width={1200} height={1200} className="!w-full !h-full" />
+        </div>
+        <div className="absolute inset-0 backdrop-blur-3xl bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/85 to-[var(--bg)]/70" />
+
+        <div className="relative grid lg:grid-cols-[auto_1fr] gap-8 lg:gap-12 p-6 sm:p-10">
+          {/* 메인 카드 + 글로우 */}
+          <div className="flex justify-center lg:justify-start">
+            <div className="relative">
+              <div
+                className="absolute -inset-8 rounded-full opacity-50 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(255,203,5,0.30) 0%, rgba(238,21,21,0.12) 40%, transparent 70%)",
+                  filter: "blur(28px)"
+                }}
+                aria-hidden
+              />
+              <div className="relative rounded-2xl overflow-hidden ring-2 ring-yellow-400/30 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_30px_rgba(255,203,5,0.20)]">
+                <CardImage image={cardImage} variant="card" width={280} height={392} priority />
+                <div
+                  className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-40"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg, rgba(255,80,130,0.3), rgba(255,180,50,0.3), rgba(255,230,100,0.3), rgba(100,230,200,0.3), rgba(100,200,255,0.3), rgba(180,100,255,0.3), rgba(255,80,130,0.3))"
+                  }}
+                />
+              </div>
+            </div>
           </div>
-          <h1 className="text-3xl font-extrabold mt-1">{card.nameKo}</h1>
-          <div className="text-sm text-ink-muted mt-1">{card.nameEn}{card.illustrator ? ` · 일러스트 ${card.illustrator}` : ""}</div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Badge variant="primary">{card.rarity}</Badge>
-            {card.pokemonType && <Badge variant="info">{card.pokemonType}</Badge>}
-            {card.tags.map((t) => (
-              <Badge key={t} variant="neutral">{t}</Badge>
-            ))}
+
+          {/* 정보 */}
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+            <div className="text-[10px] font-pixel tracking-widest uppercase text-[var(--fg-faint)]">
+              <Link href={`/cards/${card.setId}`} className="hover:text-[var(--accent)] transition-colors">
+                {set?.nameKo}
+              </Link>
+              <span className="mx-2 text-[var(--border-strong)]">·</span>
+              #{card.number}
+            </div>
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl tracking-tight text-[var(--fg)] mt-3 leading-tight">
+              {card.nameKo}
+            </h1>
+            <div className="text-sm text-[var(--fg-muted)] mt-2 font-mono">
+              {card.nameEn}{card.illustrator ? ` · illust. ${card.illustrator}` : ""}
+            </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Badge variant="primary">{card.rarity}</Badge>
+              {card.pokemonType && <Badge variant="info">{card.pokemonType}</Badge>}
+              {card.tags.map((t) => (
+                <Badge key={t} variant="neutral">{t}</Badge>
+              ))}
+            </div>
+            <p className="text-xs text-[var(--fg-faint)] mt-5 max-w-md leading-relaxed">
+              ※ 이미지는 <strong className="text-[var(--fg-muted)]">{set?.nameKo}</strong> 세트의 #{card.number.split("/")[0]} 카드 — 세트별 정확히 매칭되어 동명 카드와 혼동되지 않습니다.
+            </p>
           </div>
-          <p className="text-xs text-ink-muted mt-3 max-w-md">
-            ※ 이미지는 <strong>{set?.nameKo}</strong> 세트의 #{card.number.split("/")[0]} 카드와 매칭되며,
-            동명의 다른 세트 카드(예: 흑염의 지배자 vs 151의 리자몽 ex)와 혼동되지 않습니다.
-          </p>
         </div>
       </header>
 
