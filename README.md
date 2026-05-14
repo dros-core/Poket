@@ -25,10 +25,44 @@
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # 정적 빌드 (Vercel/Netlify 즉시 배포 가능)
+npm run data:prefetch   # TCGdex에서 카드 메타+이미지 사전 패치 (선택)
+npm run data:verify     # 시드 데이터 ↔ TCGdex 캐시 정합성 검증
+npm run dev             # http://localhost:3000
+npm run build           # 정적 빌드 (Vercel/Netlify 즉시 배포 가능)
 npm run typecheck
 ```
+
+## 데이터 정합성 보증
+
+- **`scripts/prefetch-tcgdex.mjs`** — TCGdex API에서 모든 추적 세트의 카드 메타+이미지 base URL을
+  `data/cache/tcgdex/<setId>.json` 으로 저장. 한국어 → 일본어 → 영어 순서로 폴백.
+- **`scripts/verify-data.mjs`** — 시드의 모든 카드(localId)와 hero 매핑이 TCGdex 캐시에 실재하는지
+  자동 검증. CI에 연결하여 데이터 오류 회귀 방지 가능.
+- **이미지 정합성**: `lib/data/imageResolver.ts` 가 `setId + localId` 조합으로 이미지를
+  매칭하므로, 동명의 다른 세트 카드(예: 151 #201 리자몽 ex SAR vs 흑염 #134 리자몽 ex SAR)는
+  세트 단위로 정확히 분리됨.
+
+### 추적 세트 목록 (29개)
+
+| 시리즈 | 세트 | 한국 발매일 | TCGdex |
+| --- | --- | --- | --- |
+| SV 1세대 | 스칼렛/바이올렛 ex, 트리플렛 비트 | 2023-04 ~ 05 | SV1S/V/a |
+| SV 1.5 | 스노해저드, 클레이버스트 | 2023-06 | SV2P/D |
+| SV 강화확장팩 | 포켓몬 카드 151 | 2023-07 | SV2a |
+| SV 2세대 | 레이징 서프, 흑염의 지배자 | 2023-08~09 | SV3a, SV3 |
+| SV 3세대 | 고대의 포효, 미래의 일섬 | 2023-11 | SV4K/M |
+| SV 하이클래스 | 샤이니 트레저 ex | 2024-01 | SV4a |
+| SV 4세대 | 크림슨 헤이즈, 와일드포스, 사이버저지 | 2024-02~03 | SV5a/K/M |
+| SV 5세대 | 변환의 가면, 나이트 원더러 | 2024-06~08 | SV6/6a |
+| SV 6세대 | 스텔라 미라클, 낙원 드래고나 | 2024-09~10 | SV7/7a |
+| SV 7세대 | 초전 브레이커 | 2024-11 | SV8 |
+| SV 하이클래스 | 테라스탈 페스타 ex | 2025-01 | SV8a |
+| SV 8세대 | 배틀 파트너즈, 열풍의 아레나, 로켓단의 영광 | 2025-03 ~ 06 | SV9/9a/10 |
+| SV 하이클래스 | 화이트 플레어, 블랙 볼트 | 2025-09 | SV11W/B |
+| **메가 진화** | 메가브레이브, 메가심포니아 | **2025-09** | M1L/S |
+| **메가 진화** | 인페르노 X | **2025-11** | M2 |
+| **메가 진화** | **닌자스피너** | **2026-05** | M3 |
+
 
 ## 프로젝트 구조
 

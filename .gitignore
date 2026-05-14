@@ -35,7 +35,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# data cache
-data/cache/
+# data scrape (실시간 수집은 git 제외)
 data/scraped/
 *.sqlite
+
+# TCGdex 캐시는 빌드 재현성을 위해 커밋 (사이즈 작고 변경 빈도 낮음)
+# data/cache/  → 의도적으로 트래킹

@@ -3,9 +3,11 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Stat } from "@/components/ui/Stat";
 import { Badge } from "@/components/ui/Badge";
+import { CardImage } from "@/components/cards/CardImage";
 import { PriceTrendChart } from "@/components/charts/PriceTrendChart";
 import { repository } from "@/lib/data/repository";
 import { formatPct, formatPrice } from "@/lib/format";
+import { resolveCardImage } from "@/lib/data/imageResolver";
 
 export function generateStaticParams() {
   return repository.listCards().map((c) => ({ id: c.id }));
@@ -26,17 +28,27 @@ export default function SingleCardPage({ params }: { params: { id: string } }) {
       <Link href={`/cards/${card.setId}`} className="inline-flex items-center gap-1 text-sm text-ink-muted hover:underline">
         <ArrowLeft size={14} /> {set?.nameKo ?? "세트"}로 돌아가기
       </Link>
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <div className="text-sm text-ink-muted">{set?.nameKo} · {card.number}</div>
+      <header className="flex flex-wrap items-start gap-6">
+        <CardImage image={resolveCardImage(card, set)} variant="card" width={220} height={308} priority />
+        <div className="flex-1 min-w-0">
+          <div className="text-sm text-ink-muted">
+            <Link href={`/cards/${card.setId}`} className="hover:underline">{set?.nameKo}</Link>
+            {" · "}
+            {card.number}
+          </div>
           <h1 className="text-3xl font-extrabold mt-1">{card.nameKo}</h1>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="text-sm text-ink-muted mt-1">{card.nameEn}{card.illustrator ? ` · 일러스트 ${card.illustrator}` : ""}</div>
+          <div className="mt-3 flex flex-wrap gap-2">
             <Badge variant="primary">{card.rarity}</Badge>
             {card.pokemonType && <Badge variant="info">{card.pokemonType}</Badge>}
             {card.tags.map((t) => (
               <Badge key={t} variant="neutral">{t}</Badge>
             ))}
           </div>
+          <p className="text-xs text-ink-muted mt-3 max-w-md">
+            ※ 이미지는 <strong>{set?.nameKo}</strong> 세트의 #{card.number.split("/")[0]} 카드와 매칭되며,
+            동명의 다른 세트 카드(예: 흑염의 지배자 vs 151의 리자몽 ex)와 혼동되지 않습니다.
+          </p>
         </div>
       </header>
 

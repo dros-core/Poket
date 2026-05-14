@@ -63,7 +63,11 @@ export interface CardSet {
   packsPerBox: number;
   cardsPerPack: number;
   msrpKRW: number; // 정가 (박스 기준)
-  imageUrl?: string;
+  imageUrl?: string; // 박스/로고 대표 이미지
+  imageSource?: ImageSource;
+  tcgdexId?: string; // TCGdex 세트 ID (예: "sv02")
+  pokemontcgIoId?: string; // pokemontcg.io 세트 ID (예: "sv3pt5")
+  references?: SourceReference[]; // KREAM/너정다/TCGBOX 시세 페이지
   isActive: boolean; // 절판 여부
 }
 
@@ -77,9 +81,21 @@ export interface Card {
   illustrator?: string;
   pokemonType?: string; // 풀, 불꽃, 물 등
   imageUrl?: string;
+  imageSource?: ImageSource;
+  tcgdexId?: string; // TCGdex 카드 ID (예: "sv02-183")
+  pokemontcgIoId?: string; // pokemontcg.io 카드 ID
+  references?: SourceReference[];
   isPullable: boolean; // 박스에서 직접 나오는지
   pullRate?: number; // 박스 1개당 평균 봉입률 (0~1)
   tags: string[]; // ["인기", "프로모", "한국한정"] 등
+}
+
+export type ImageSource = "TCGDEX_KO" | "TCGDEX_EN" | "TCGDEX_JA" | "POKEMONTCG_IO" | "LOCAL" | "PLACEHOLDER";
+
+export interface SourceReference {
+  label: string;
+  url: string;
+  kind: "PRICE" | "META" | "OFFICIAL" | "COMMUNITY";
 }
 
 export interface PriceObservation {

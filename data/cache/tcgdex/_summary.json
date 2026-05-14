@@ -1,0 +1,180 @@
+[
+  {
+    "setId": "SV1S",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 108
+  },
+  {
+    "setId": "SV1V",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 108
+  },
+  {
+    "setId": "SV1a",
+    "status": "cached",
+    "lang": "ko",
+    "cards": 0
+  },
+  {
+    "setId": "SV2D",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 99
+  },
+  {
+    "setId": "SV2P",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 99
+  },
+  {
+    "setId": "SV2a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 210
+  },
+  {
+    "setId": "SV3",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 141
+  },
+  {
+    "setId": "SV3a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 92
+  },
+  {
+    "setId": "SV4K",
+    "status": "cached",
+    "lang": "ko",
+    "cards": 95
+  },
+  {
+    "setId": "SV4M",
+    "status": "cached",
+    "lang": "ko",
+    "cards": 95
+  },
+  {
+    "setId": "SV4a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 320
+  },
+  {
+    "setId": "SV5K",
+    "status": "cached",
+    "lang": "ko",
+    "cards": 49
+  },
+  {
+    "setId": "SV5M",
+    "status": "cached",
+    "lang": "ko",
+    "cards": 0
+  },
+  {
+    "setId": "SV5a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 96
+  },
+  {
+    "setId": "SV6",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 101
+  },
+  {
+    "setId": "SV6a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 0
+  },
+  {
+    "setId": "SV7",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 135
+  },
+  {
+    "setId": "SV7a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 94
+  },
+  {
+    "setId": "SV8",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 106
+  },
+  {
+    "setId": "SV8a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 237
+  },
+  {
+    "setId": "SV9",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 132
+  },
+  {
+    "setId": "SV9a",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 92
+  },
+  {
+    "setId": "SV10",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 98
+  },
+  {
+    "setId": "SV11W",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 174
+  },
+  {
+    "setId": "SV11B",
+    "status": "cached",
+    "lang": "ja",
+    "cards": 174
+  },
+  {
+    "setId": "M1L",
+    "status": "ok",
+    "lang": "ja",
+    "cards": 92,
+    "name": "メガブレイブ"
+  },
+  {
+    "setId": "M1S",
+    "status": "ok",
+    "lang": "ja",
+    "cards": 92,
+    "name": "メガシンフォニア"
+  },
+  {
+    "setId": "M2",
+    "status": "ok",
+    "lang": "ja",
+    "cards": 116,
+    "name": "インフェルノX"
+  },
+  {
+    "setId": "M3",
+    "status": "ok",
+    "lang": "ja",
+    "cards": 117,
+    "name": "ムニキスゼロ"
+  }
+]

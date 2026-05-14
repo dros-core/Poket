@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "data:prefetch": "node scripts/prefetch-tcgdex.mjs",
+    "data:prefetch:force": "FORCE=1 node scripts/prefetch-tcgdex.mjs",
+    "data:verify": "node scripts/verify-data.mjs"
   },
   "dependencies": {
     "next": "14.2.18",

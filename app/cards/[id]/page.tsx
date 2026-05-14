@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Stat } from "@/components/ui/Stat";
 import { Badge } from "@/components/ui/Badge";
+import { CardImage } from "@/components/cards/CardImage";
 import { PriceTrendChart } from "@/components/charts/PriceTrendChart";
 import { repository } from "@/lib/data/repository";
 import { formatDate, formatPct, formatPrice } from "@/lib/format";
+import { resolveSetImage, resolveCardImage } from "@/lib/data/imageResolver";
 
 export function generateStaticParams() {
   return repository.listSets().map((s) => ({ id: s.id }));
@@ -32,16 +34,33 @@ export default function SetDetailPage({ params }: { params: { id: string } }) {
         <ArrowLeft size={14} /> 목록으로
       </Link>
 
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div>
+      <header className="flex flex-wrap items-start gap-6">
+        <CardImage image={resolveSetImage(set)} variant="card" width={180} height={252} priority />
+        <div className="flex-1 min-w-0">
           <div className="text-sm text-ink-muted">{set.series} · {set.code}</div>
           <h1 className="text-3xl font-extrabold tracking-tight mt-1">{set.nameKo}</h1>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="text-sm text-ink-muted mt-1">{set.nameEn}{set.nameJa ? ` / ${set.nameJa}` : ""}</div>
+          <div className="mt-3 flex flex-wrap gap-2">
             {set.isActive ? <Badge variant="success">유통중</Badge> : <Badge variant="warning">절판</Badge>}
             <Badge variant="neutral">발매 {formatDate(set.releaseDate)}</Badge>
             <Badge variant="neutral">{set.packsPerBox}팩 / 박스</Badge>
             <Badge variant="neutral">총 {set.totalCards}종</Badge>
           </div>
+          {set.references && set.references.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {set.references.map((r) => (
+                <a
+                  key={r.url}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md surface hover:bg-[var(--surface-muted)]"
+                >
+                  {r.label} <ExternalLink size={11} />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </header>
 
@@ -170,28 +189,37 @@ export default function SetDetailPage({ params }: { params: { id: string } }) {
 
       {cards.length > 0 && (
         <section>
-          <h2 className="font-bold text-lg mb-3">이 세트의 인기 싱글</h2>
+          <h2 className="font-bold text-lg mb-1">이 세트의 인기 싱글</h2>
+          <p className="text-xs text-ink-muted mb-3">
+            카드 이미지는 TCGdex에서 자동으로 매칭됩니다. <strong>해당 세트의 카드만 표시</strong> — 다른 세트의 동명 카드와 혼동되지 않도록 set 단위로 분리.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {cards.map((c) => (
-              <Link
-                key={c.id}
-                href={`/cards/single/${c.id}`}
-                className="card hover:-translate-y-0.5 transition"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <div className="text-xs text-ink-muted">{c.number}</div>
-                    <div className="font-bold truncate">{c.nameKo}</div>
+            {cards.map((c) => {
+              const cardImage = resolveCardImage(c, set);
+              return (
+                <Link
+                  key={c.id}
+                  href={`/cards/single/${c.id}`}
+                  className="card hover:-translate-y-0.5 transition flex gap-3"
+                >
+                  <CardImage image={cardImage} variant="card" width={70} height={98} className="shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="text-xs text-ink-muted">{c.number}</div>
+                        <div className="font-bold truncate">{c.nameKo}</div>
+                      </div>
+                      <Badge variant="primary">{c.rarity}</Badge>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {c.tags.slice(0, 2).map((t) => (
+                        <Badge key={t} variant="neutral">{t}</Badge>
+                      ))}
+                    </div>
                   </div>
-                  <Badge variant="primary">{c.rarity}</Badge>
-                </div>
-                <div className="mt-2 flex flex-wrap gap-1">
-                  {c.tags.slice(0, 3).map((t) => (
-                    <Badge key={t} variant="neutral">{t}</Badge>
-                  ))}
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
