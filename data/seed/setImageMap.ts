@@ -7,6 +7,11 @@
  * boxPhotoUrl: 실제 박스 패키지 사진 URL
  *   - TCGPlayer Japan 상품 이미지 (hotlink 허용 확인됨)
  *   - 또는 자체 호스팅 "/box-photos/{setId}.jpg"
+ *
+ * 자체 호스팅 박스 사진을 추가하려면:
+ *   1) public/box-photos/{setId}.{jpg|png|webp|avif} 저장
+ *   2) `npm run box:sync:write` 실행 → 이 파일의 boxPhotoUrl 자동 갱신
+ *   3) `npm run build` 통과 확인 후 commit
  */
 
 const TCG = (productId: number) => `https://product-images.tcgplayer.com/fit-in/600x600/${productId}.jpg`;
@@ -28,6 +33,7 @@ export const setImageMap: SetImageMapping[] = [
   { setId: "sv2p",  tcgdexId: "SV2P",  heroCardLocalId: "097", pokemontcgIoId: "sv2",     boxPhotoUrl: TCG(565239) },
   { setId: "sv2d",  tcgdexId: "SV2D",  heroCardLocalId: "091", pokemontcgIoId: "sv2",     boxPhotoUrl: TCG(565240) },
   { setId: "sv2a",  tcgdexId: "SV2a",  heroCardLocalId: "201", pokemontcgIoId: "sv3pt5",  boxPhotoUrl: TCG(565243) },
+  // sv3a (레이징 서프): TCGPlayer 미등록 → 자체 호스팅 권장. public/box-photos/sv3a.{jpg|png|webp} 추가 후 `npm run box:sync:write`
   { setId: "sv3a",  tcgdexId: "SV3a",  heroCardLocalId: "088" },
   { setId: "sv3",   tcgdexId: "SV3",   heroCardLocalId: "134", pokemontcgIoId: "sv3",     boxPhotoUrl: TCG(565236) },
   { setId: "sv4k",  tcgdexId: "SV4K",  heroCardLocalId: "093", pokemontcgIoId: "sv4",     boxPhotoUrl: TCG(565231) },
@@ -72,10 +78,10 @@ export const setImageMap: SetImageMapping[] = [
     pokemontcgIoId: "me2", pokemontcgIoHeroNumber: "130",
     boxPhotoUrl: TCG(655968)
   },
+  // m3 (닌자스피너): TCGPlayer 미등록 → 자체 호스팅 권장. public/box-photos/m3.{jpg|png|webp} 추가 후 `npm run box:sync:write`
   {
     setId: "m3",  tcgdexId: "M3",  heroCardLocalId: "117",
     pokemontcgIoId: "me3", pokemontcgIoHeroNumber: "124"
-    // m3 (닌자스피너) TCGPlayer 미등록 → BoxMockup으로 폴백
   }
 ];
 
