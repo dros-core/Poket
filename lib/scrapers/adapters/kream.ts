@@ -17,6 +17,7 @@
  *   KREAM_PRODUCT_URL=https://kream.co.kr/products/       (선택)
  *
  * @see lib/scrapers/README.md
+ * @see docs/KREAM_MAPPING.md  ← productId 검증/등록 가이드
  */
 
 import type {
@@ -42,17 +43,70 @@ const KREAM_CACHE_TTL_MS = Number(process.env.KREAM_CACHE_TTL_MS ?? 6 * 60 * 60 
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 세트 ID ↔ KREAM productId 수동 매핑
-// (KREAM 상품 페이지 URL 의 마지막 path segment 가 productId)
-// 예: https://kream.co.kr/products/123456 → productId: "123456"
 //
-// 신규 박스 등록 시 한 번 추가하면 됩니다. 미등록 setId 는 빈 결과 반환.
+// 등록 방법 (docs/KREAM_MAPPING.md 참조):
+//   1) 아래 KREAM_SEARCH_HINT 의 검색 URL 을 브라우저로 열기
+//   2) 박스 상품 카드 클릭 → URL 마지막 segment 가 productId
+//      예: https://kream.co.kr/products/123456 → "123456"
+//   3) 아래 KREAM_PRODUCT_MAP 에 추가: sv2a: "123456"
+//   4) `POKET_USE_LIVE=true npm run dev` 로 검증
+//
+// ⚠️  KREAM 은 anti-bot 으로 자동 검색이 차단됩니다 → 사용자가 수동으로 검증해야 합니다.
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * 인기 박스의 KREAM 검색 힌트. productId 는 사용자가 수동 등록.
+ * 우선순위는 시세차익 기회가 큰 박스 (절판/하이클래스/메가) 순.
+ */
+export const KREAM_SEARCH_HINT: Record<string, { keyword: string; tier: "high" | "mid" | "low" }> = {
+  // === 절판 (프리미엄 형성, 시세차익 1순위) ===
+  sv2a: { keyword: "포켓몬 카드 151 부스터박스", tier: "high" }, // 절판, 강화확장팩
+  sv4a: { keyword: "포켓몬 샤이니 트레저 ex 박스", tier: "high" }, // 절판, 하이클래스
+  sv3a: { keyword: "포켓몬 레이징 서프 박스", tier: "mid" }, // 절판, SV 본팩
+  sv3: { keyword: "포켓몬 흑염의 지배자 박스", tier: "mid" }, // 절판
+  sv1k: { keyword: "포켓몬 스칼렛 ex 박스", tier: "mid" }, // 절판
+  sv1v: { keyword: "포켓몬 바이올렛 ex 박스", tier: "mid" }, // 절판
+
+  // === 현역 하이클래스 (수요 강함) ===
+  sv11w: { keyword: "포켓몬 화이트 플레어 박스", tier: "high" },
+  sv11b: { keyword: "포켓몬 블랙 볼트 박스", tier: "high" },
+  sv8a: { keyword: "포켓몬 테라스탈 페스타 박스", tier: "high" },
+
+  // === 메가 시리즈 (신규, 변동성 큼) ===
+  m3: { keyword: "포켓몬 닌자스피너 박스", tier: "high" }, // 2026-05 발매
+  m2: { keyword: "포켓몬 인페르노 X 박스", tier: "high" },
+  m1l: { keyword: "포켓몬 메가브레이브 박스", tier: "high" },
+  m1s: { keyword: "포켓몬 메가심포니아 박스", tier: "mid" },
+
+  // === 현역 SV 본팩 (정가 부근) ===
+  sv10: { keyword: "포켓몬 로켓단의 영광 박스", tier: "mid" },
+  sv9: { keyword: "포켓몬 배틀 파트너즈 박스", tier: "mid" },
+  sv9a: { keyword: "포켓몬 열풍의 아레나 박스", tier: "mid" },
+  sv8: { keyword: "포켓몬 초전 브레이커 박스", tier: "low" },
+  sv7: { keyword: "포켓몬 스텔라 미라클 박스", tier: "low" },
+  sv7a: { keyword: "포켓몬 낙원 드래고나 박스", tier: "low" },
+  sv6: { keyword: "포켓몬 변환의 가면 박스", tier: "low" },
+  sv6a: { keyword: "포켓몬 나이트 원더러 박스", tier: "low" },
+  sv5k: { keyword: "포켓몬 와일드포스 박스", tier: "low" },
+  sv5m: { keyword: "포켓몬 사이버저지 박스", tier: "low" }
+};
+
+export function getKreamSearchUrl(setId: string): string | null {
+  const hint = KREAM_SEARCH_HINT[setId];
+  if (!hint) return null;
+  return `${KREAM_SEARCH_URL}?keyword=${encodeURIComponent(hint.keyword)}`;
+}
+
+/**
+ * 검증된 매핑만 여기에 등록.
+ *
+ * 사용자가 KREAM 상품 페이지에서 productId 를 확인 후 추가하세요.
+ * 예시:
+ *   sv2a: "123456",   // 포켓몬 카드 151 부스터박스 (검증: 2026-05-14)
+ *   sv11w: "654321",  // 화이트 플레어 (검증: 2026-05-14)
+ */
 export const KREAM_PRODUCT_MAP: Record<string, string | undefined> = {
-  // 등록된 매핑이 아직 없습니다. KREAM 상품 페이지 URL 에서 productId 를 찾아
-  // 다음과 같이 추가하세요:
-  //   sv2a: "123456"   // 포켓몬 카드 151 부스터박스
-  //   sv11w: "654321"  // 화이트 플레어 부스터박스
+  // 매핑 비어 있음 — docs/KREAM_MAPPING.md 의 단계별 가이드를 참조하여 등록하세요.
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -122,7 +176,6 @@ function extractNextData<T = unknown>(html: string): T | null {
 function pickPriceFromNextData(data: unknown): number | null {
   if (!data || typeof data !== "object") return null;
 
-  // 휴리스틱 1: props.pageProps.product.last_price (가장 빈번한 형태)
   const candidates: Array<(d: any) => number | null | undefined> = [
     (d) => d?.props?.pageProps?.product?.last_price,
     (d) => d?.props?.pageProps?.product?.recent_price,
