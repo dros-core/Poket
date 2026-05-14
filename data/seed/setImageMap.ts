@@ -27,56 +27,56 @@ export interface SetImageMapping {
 
 export const setImageMap: SetImageMapping[] = [
   // === SV 본팩 ===
-  { setId: "sv1k",  tcgdexId: "SV1S",  heroCardLocalId: "106", pokemontcgIoId: "sv1",     boxPhotoUrl: TCG(565247) },
-  { setId: "sv1v",  tcgdexId: "SV1V",  heroCardLocalId: "106", pokemontcgIoId: "sv1",     boxPhotoUrl: TCG(565244) },
-  { setId: "sv1a",  tcgdexId: "SV1a",  heroCardLocalId: "087",                            boxPhotoUrl: TCG(565248) },
-  { setId: "sv2p",  tcgdexId: "SV2P",  heroCardLocalId: "097", pokemontcgIoId: "sv2",     boxPhotoUrl: TCG(565239) },
-  { setId: "sv2d",  tcgdexId: "SV2D",  heroCardLocalId: "091", pokemontcgIoId: "sv2",     boxPhotoUrl: TCG(565240) },
-  { setId: "sv2a",  tcgdexId: "SV2a",  heroCardLocalId: "201", pokemontcgIoId: "sv3pt5",  boxPhotoUrl: TCG(565243) },
+  { setId: "sv1k",  tcgdexId: "SV1S",  heroCardLocalId: "106", pokemontcgIoId: "sv1",     boxPhotoUrl: "/box-photos/sv1k.webp" },
+  { setId: "sv1v",  tcgdexId: "SV1V",  heroCardLocalId: "106", pokemontcgIoId: "sv1",     boxPhotoUrl: "/box-photos/sv1v.webp" },
+  { setId: "sv1a",  tcgdexId: "SV1a",  heroCardLocalId: "087",                            boxPhotoUrl: "/box-photos/sv1a.webp" },
+  { setId: "sv2p",  tcgdexId: "SV2P",  heroCardLocalId: "097", pokemontcgIoId: "sv2",     boxPhotoUrl: "/box-photos/sv2p.webp" },
+  { setId: "sv2d",  tcgdexId: "SV2D",  heroCardLocalId: "091", pokemontcgIoId: "sv2",     boxPhotoUrl: "/box-photos/sv2d.webp" },
+  { setId: "sv2a",  tcgdexId: "SV2a",  heroCardLocalId: "201", pokemontcgIoId: "sv3pt5",  boxPhotoUrl: "/box-photos/sv2a.webp" },
   // sv3a (레이징 서프): TCGPlayer 미등록 → 자체 호스팅 권장. public/box-photos/sv3a.{jpg|png|webp} 추가 후 `npm run box:sync:write`
   { setId: "sv3a",  tcgdexId: "SV3a",  heroCardLocalId: "088" },
-  { setId: "sv3",   tcgdexId: "SV3",   heroCardLocalId: "134", pokemontcgIoId: "sv3",     boxPhotoUrl: TCG(565236) },
-  { setId: "sv4k",  tcgdexId: "SV4K",  heroCardLocalId: "093", pokemontcgIoId: "sv4",     boxPhotoUrl: TCG(565231) },
-  { setId: "sv4m",  tcgdexId: "SV4M",  heroCardLocalId: "093", pokemontcgIoId: "sv4",     boxPhotoUrl: TCG(565228) },
-  { setId: "sv4a",  tcgdexId: "SV4a",  heroCardLocalId: "320", pokemontcgIoId: "sv4pt5",  boxPhotoUrl: TCG(565232) },
-  { setId: "sv5a",  tcgdexId: "SV5a",  heroCardLocalId: "095",                            boxPhotoUrl: TCG(565226) },
-  { setId: "sv5k",  tcgdexId: "SV5K",  heroCardLocalId: "100", pokemontcgIoId: "sv5",     boxPhotoUrl: TCG(565225) },
-  { setId: "sv5m",  tcgdexId: "SV5M",  heroCardLocalId: "100", pokemontcgIoId: "sv5",     boxPhotoUrl: TCG(565222) },
-  { setId: "sv6",   tcgdexId: "SV6",   heroCardLocalId: "098", pokemontcgIoId: "sv6",     boxPhotoUrl: TCG(565221) },
-  { setId: "sv6a",  tcgdexId: "SV6a",  heroCardLocalId: "092",                            boxPhotoUrl: TCG(565218) },
-  { setId: "sv7",   tcgdexId: "SV7",   heroCardLocalId: "133", pokemontcgIoId: "sv7",     boxPhotoUrl: TCG(565217) },
-  { setId: "sv7a",  tcgdexId: "SV7a",  heroCardLocalId: "094",                            boxPhotoUrl: TCG(580709) },
-  { setId: "sv8",   tcgdexId: "SV8",   heroCardLocalId: "106",                            boxPhotoUrl: TCG(587728) },
-  { setId: "sv8a",  tcgdexId: "SV8a",  heroCardLocalId: "237", pokemontcgIoId: "sv8pt5",  boxPhotoUrl: TCG(603428) },
-  { setId: "sv9",   tcgdexId: "SV9",   heroCardLocalId: "131", pokemontcgIoId: "sv9",     boxPhotoUrl: TCG(614707) },
-  { setId: "sv9a",  tcgdexId: "SV9a",  heroCardLocalId: "090",                            boxPhotoUrl: TCG(623310) },
-  { setId: "sv10",  tcgdexId: "SV10",  heroCardLocalId: "098", pokemontcgIoId: "sv10",    boxPhotoUrl: TCG(629197) },
+  { setId: "sv3",   tcgdexId: "SV3",   heroCardLocalId: "134", pokemontcgIoId: "sv3",     boxPhotoUrl: "/box-photos/sv3.webp" },
+  { setId: "sv4k",  tcgdexId: "SV4K",  heroCardLocalId: "093", pokemontcgIoId: "sv4",     boxPhotoUrl: "/box-photos/sv4k.webp" },
+  { setId: "sv4m",  tcgdexId: "SV4M",  heroCardLocalId: "093", pokemontcgIoId: "sv4",     boxPhotoUrl: "/box-photos/sv4m.webp" },
+  { setId: "sv4a",  tcgdexId: "SV4a",  heroCardLocalId: "320", pokemontcgIoId: "sv4pt5",  boxPhotoUrl: "/box-photos/sv4a.webp" },
+  { setId: "sv5a",  tcgdexId: "SV5a",  heroCardLocalId: "095",                            boxPhotoUrl: "/box-photos/sv5a.webp" },
+  { setId: "sv5k",  tcgdexId: "SV5K",  heroCardLocalId: "100", pokemontcgIoId: "sv5",     boxPhotoUrl: "/box-photos/sv5k.webp" },
+  { setId: "sv5m",  tcgdexId: "SV5M",  heroCardLocalId: "100", pokemontcgIoId: "sv5",     boxPhotoUrl: "/box-photos/sv5m.webp" },
+  { setId: "sv6",   tcgdexId: "SV6",   heroCardLocalId: "098", pokemontcgIoId: "sv6",     boxPhotoUrl: "/box-photos/sv6.webp" },
+  { setId: "sv6a",  tcgdexId: "SV6a",  heroCardLocalId: "092",                            boxPhotoUrl: "/box-photos/sv6a.webp" },
+  { setId: "sv7",   tcgdexId: "SV7",   heroCardLocalId: "133", pokemontcgIoId: "sv7",     boxPhotoUrl: "/box-photos/sv7.webp" },
+  { setId: "sv7a",  tcgdexId: "SV7a",  heroCardLocalId: "094",                            boxPhotoUrl: "/box-photos/sv7a.webp" },
+  { setId: "sv8",   tcgdexId: "SV8",   heroCardLocalId: "106",                            boxPhotoUrl: "/box-photos/sv8.webp" },
+  { setId: "sv8a",  tcgdexId: "SV8a",  heroCardLocalId: "237", pokemontcgIoId: "sv8pt5",  boxPhotoUrl: "/box-photos/sv8a.webp" },
+  { setId: "sv9",   tcgdexId: "SV9",   heroCardLocalId: "131", pokemontcgIoId: "sv9",     boxPhotoUrl: "/box-photos/sv9.webp" },
+  { setId: "sv9a",  tcgdexId: "SV9a",  heroCardLocalId: "090",                            boxPhotoUrl: "/box-photos/sv9a.webp" },
+  { setId: "sv10",  tcgdexId: "SV10",  heroCardLocalId: "098", pokemontcgIoId: "sv10",    boxPhotoUrl: "/box-photos/sv10.webp" },
   // === 화이트플레어 / 블랙볼트 (TCGdex 카드 이미지 미커버 → pokemontcg.io 폴백) ===
   {
     setId: "sv11w", tcgdexId: "SV11W", heroCardLocalId: "174",
     pokemontcgIoId: "rsv10pt5", pokemontcgIoHeroNumber: "173",
-    boxPhotoUrl: TCG(637386)
+    boxPhotoUrl: "/box-photos/sv11w.webp"
   },
   {
     setId: "sv11b", tcgdexId: "SV11B", heroCardLocalId: "174",
     pokemontcgIoId: "zsv10pt5", pokemontcgIoHeroNumber: "172",
-    boxPhotoUrl: TCG(637384)
+    boxPhotoUrl: "/box-photos/sv11b.webp"
   },
   // === 메가 시리즈 ===
   {
     setId: "m1l", tcgdexId: "M1L", heroCardLocalId: "092",
     pokemontcgIoId: "me1", pokemontcgIoHeroNumber: "188",
-    boxPhotoUrl: TCG(647500)
+    boxPhotoUrl: "/box-photos/m1l.webp"
   },
   {
     setId: "m1s", tcgdexId: "M1S", heroCardLocalId: "092",
     pokemontcgIoId: "me1", pokemontcgIoHeroNumber: "187",
-    boxPhotoUrl: TCG(647501)
+    boxPhotoUrl: "/box-photos/m1s.webp"
   },
   {
     setId: "m2",  tcgdexId: "M2",  heroCardLocalId: "116",
     pokemontcgIoId: "me2", pokemontcgIoHeroNumber: "130",
-    boxPhotoUrl: TCG(655968)
+    boxPhotoUrl: "/box-photos/m2.webp"
   },
   // m3 (닌자스피너): TCGPlayer 미등록 → 자체 호스팅 권장. public/box-photos/m3.{jpg|png|webp} 추가 후 `npm run box:sync:write`
   {
