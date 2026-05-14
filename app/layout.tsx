@@ -20,8 +20,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbf9f7" },
-    { media: "(prefers-color-scheme: dark)", color: "#0c0a09" }
+    { media: "(prefers-color-scheme: light)", color: "#0a0a0d" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0d" }
   ],
   width: "device-width",
   initialScale: 1,
@@ -30,14 +30,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" data-theme="light" suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col antialiased">
-        <Header />
-        <main className="flex-1 mx-auto w-full max-w-7xl px-4 lg:px-6 py-6 sm:py-8 pb-24 lg:pb-12">
-          {children}
-        </main>
-        <Footer />
-        <MobileBottomNav />
+    <html lang="ko" data-theme="dark" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col antialiased font-ui">
+        <div className="relative z-10 flex-1 flex flex-col">
+          <Header />
+          <main className="flex-1 mx-auto w-full max-w-7xl px-4 lg:px-6 py-6 sm:py-10 pb-24 lg:pb-16">
+            {children}
+          </main>
+          <Footer />
+          <MobileBottomNav />
+        </div>
       </body>
     </html>
   );

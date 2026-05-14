@@ -4,74 +4,102 @@
 
 /* === 폰트 === */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Jua&family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap");
 
-/* === 디자인 토큰 === */
+/* === 디자인 토큰 — 다크 도미넌트 === */
 :root {
-  /* 라이트 모드 (따뜻한 베이스) */
-  --bg: #fdfaf5;
-  --bg-elev: #ffffff;
-  --bg-mute: #f6efe2;
-  --bg-card: #ffffff;
-  --fg: #1a1814;
-  --fg-soft: #3d3a33;
-  --fg-muted: #6b665c;
-  --fg-faint: #9a958a;
-  --border: #ebe3d3;
-  --border-strong: #d4c9b0;
+  /* 다크가 시그니처. 라이트는 보조 */
+  --bg:        #0a0a0d;
+  --bg-elev:   #111114;
+  --bg-mute:   #15161a;
+  --bg-card:   #131318;
+  --bg-glass:  rgba(20, 20, 25, 0.65);
+  --fg:        #ededf3;
+  --fg-soft:   #c7c7d1;
+  --fg-muted:  #8b8b98;
+  --fg-faint:  #5a5a66;
+  --border:    #22232a;
+  --border-strong: #2e303a;
 
-  /* 포켓몬 코어 */
-  --pkm-red: #EE1515;
-  --pkm-red-dark: #B7090E;
+  /* 포켓몬 코어 — 절제된 사용 */
+  --pkm-red:    #EE1515;
+  --pkm-red-soft: #ff5050;
   --pkm-yellow: #FFCB05;
-  --pkm-yellow-dark: #E6B400;
-  --pkm-blue: #3D7DCA;
-  --pkm-blue-dark: #2A5A9E;
-  --pkm-navy: #003A70;
-  --pkm-ink: #222224;
+  --pkm-gold:   #d4a017;  /* 럭셔리 메탈릭 골드 변형 */
+  --pkm-blue:   #6BA0E0;
+  --pkm-blue-deep: #2A5A9E;
+  --pkm-ink:    #0a0a0d;
 
-  /* 시세 컨벤션 (포켓몬 톤) */
-  --up: #EE1515;
-  --down: #3D7DCA;
-  --up-bg: rgba(238, 21, 21, 0.10);
-  --down-bg: rgba(61, 125, 202, 0.10);
-  --accent: #EE1515;
-  --accent-bg: rgba(238, 21, 21, 0.08);
+  /* 시세 컨벤션 — 한국 룰 + 다크 톤 */
+  --up:    #ff5050;       /* 다크 위에서 잘 보이는 채도 높은 빨강 */
+  --down:  #6BA0E0;       /* 차분한 트레이너 블루 */
+  --up-bg:   rgba(255, 80, 80, 0.10);
+  --down-bg: rgba(107, 160, 224, 0.10);
+  --accent: #FFCB05;
+  --accent-bg: rgba(255, 203, 5, 0.10);
 
-  /* 모션 */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --dur-fast: 150ms;
-  --dur: 250ms;
-  --dur-slow: 400ms;
+  /* 럭셔리 그라데이션 */
+  --grad-luxe:   linear-gradient(135deg, #d4a017 0%, #FFCB05 30%, #d4a017 60%, #8a6f0e 100%);
+  --grad-aurora: linear-gradient(120deg,
+                   rgba(238, 21, 21, 0.08) 0%,
+                   rgba(255, 203, 5, 0.05) 25%,
+                   rgba(107, 160, 224, 0.08) 50%,
+                   rgba(212, 160, 23, 0.05) 75%,
+                   rgba(238, 21, 21, 0.06) 100%);
+  --grad-card:   linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 100%);
+
+  /* 모션 토큰 — 럭셔리 (느림 + 부드러움) */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-luxe:   cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fast: 200ms;
+  --dur: 400ms;
+  --dur-slow: 700ms;
+  --dur-luxe: 1100ms;
 }
 
-[data-theme="dark"] {
-  --bg: #0c0a09;
-  --bg-elev: #1a1612;
-  --bg-mute: #221d18;
-  --bg-card: #1d1814;
-  --fg: #fbf9f7;
-  --fg-soft: #e7e0d5;
-  --fg-muted: #a89e8c;
-  --fg-faint: #6b665c;
-  --border: #2a221c;
-  --border-strong: #3a322a;
-  --up: #FF5757;
-  --down: #6BA0E0;
-  --up-bg: rgba(255, 87, 87, 0.14);
-  --down-bg: rgba(107, 160, 224, 0.14);
-  --accent: #FFCB05;
-  --accent-bg: rgba(255, 203, 5, 0.14);
+/* 라이트 모드 (보조) */
+[data-theme="light"] {
+  --bg:        #fafaf7;
+  --bg-elev:   #ffffff;
+  --bg-mute:   #f4f1ec;
+  --bg-card:   #ffffff;
+  --bg-glass:  rgba(255, 255, 255, 0.75);
+  --fg:        #15151a;
+  --fg-soft:   #3a3a44;
+  --fg-muted:  #6a6a76;
+  --fg-faint:  #a3a3ad;
+  --border:    #e7e3da;
+  --border-strong: #d4ceb8;
+  --up: #EE1515;
+  --down: #2A5A9E;
+  --up-bg: rgba(238, 21, 21, 0.08);
+  --down-bg: rgba(42, 90, 158, 0.10);
+  --accent: #b98d00;
+  --accent-bg: rgba(212, 160, 23, 0.10);
 }
 
 /* === 기본 === */
-html { font-feature-settings: "ss01", "cv11", "tnum"; scroll-behavior: smooth; }
+html { font-feature-settings: "ss01", "cv11", "tnum", "cv02", "cv03", "cv04"; scroll-behavior: smooth; color-scheme: dark; }
 html, body {
   background: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+/* 다크 모드 백드롭 노이즈 텍스처 — 럭셔리 깊이감 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255, 203, 5, 0.04), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(238, 21, 21, 0.025), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 50%, rgba(107, 160, 224, 0.02), transparent 60%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -83,101 +111,168 @@ html, body {
   }
 }
 
-::selection { background: var(--pkm-red); color: white; }
-:focus-visible { outline: 2px solid var(--pkm-red); outline-offset: 2px; border-radius: 8px; }
+::selection { background: var(--accent); color: var(--pkm-ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
 
-/* === 컴포넌트 클래스 === */
-.surface { background: var(--bg-elev); border: 1px solid var(--border); }
+/* === 럭셔리 카드 === */
+.surface  { background: var(--bg-elev); border: 1px solid var(--border); }
 .surface-mute { background: var(--bg-mute); border: 1px solid var(--border); }
 
 .card {
+  position: relative;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 1.25rem;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 14px rgba(15, 23, 42, 0.04);
-  transition: transform var(--dur) var(--ease-out),
-              box-shadow var(--dur) var(--ease-out),
-              border-color var(--dur) var(--ease-out);
+  transition: transform var(--dur) var(--ease-luxe),
+              border-color var(--dur) var(--ease-luxe),
+              box-shadow var(--dur) var(--ease-luxe);
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--grad-card);
+  pointer-events: none;
+  opacity: 1;
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06), 0 16px 36px rgba(238, 21, 21, 0.08);
   border-color: var(--border-strong);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--border-strong);
 }
 
+/* === 시세 컬러 === */
 .text-up { color: var(--up); }
 .text-down { color: var(--down); }
 .bg-up { background: var(--up-bg); color: var(--up); }
 .bg-down { background: var(--down-bg); color: var(--down); }
 
-/* === 포켓몬 시그니처 그라데이션 === */
-.text-gradient-pkm {
-  background: linear-gradient(110deg, #EE1515 0%, #FF6B6B 25%, #FFCB05 60%, #FFA500 100%);
-  background-size: 200% 100%;
+/* === 럭셔리 그라디언트 텍스트 (메탈릭 골드) === */
+.text-luxe {
+  background: var(--grad-luxe);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: gradient 8s ease infinite;
+  animation: shimmer-text 6s linear infinite;
 }
+@keyframes shimmer-text {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
 .text-gradient-brand {
-  background: linear-gradient(135deg, #EE1515 0%, #B7090E 100%);
+  background: linear-gradient(135deg, #ffe890 0%, #FFCB05 40%, #d4a017 80%, #8a6f0e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* === 배경 패턴 === */
-.bg-radial-pkm {
-  background: radial-gradient(
-    ellipse 85% 65% at 20% 0%,
-    rgba(255, 203, 5, 0.22) 0%,
-    rgba(238, 21, 21, 0.12) 35%,
-    transparent 70%
-  );
-}
-.bg-radial-yellow {
-  background: radial-gradient(
-    ellipse 60% 50% at 80% 100%,
-    rgba(255, 203, 5, 0.18) 0%,
-    rgba(255, 203, 5, 0.06) 40%,
-    transparent 70%
-  );
-}
-
-.bg-pokeball-tile {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><circle cx='40' cy='40' r='14' fill='none' stroke='%23EE1515' stroke-width='2' opacity='0.18'/><line x1='26' y1='40' x2='54' y2='40' stroke='%23EE1515' stroke-width='2' opacity='0.18'/><circle cx='40' cy='40' r='4' fill='none' stroke='%23EE1515' stroke-width='2' opacity='0.18'/></svg>");
-  background-size: 80px 80px;
-}
-[data-theme="dark"] .bg-pokeball-tile {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><circle cx='40' cy='40' r='14' fill='none' stroke='%23FFCB05' stroke-width='2' opacity='0.10'/><line x1='26' y1='40' x2='54' y2='40' stroke='%23FFCB05' stroke-width='2' opacity='0.10'/><circle cx='40' cy='40' r='4' fill='none' stroke='%23FFCB05' stroke-width='2' opacity='0.10'/></svg>");
-}
-
-.bg-grid {
+/* === 배경: 미세 그리드 (Linear 스타일) === */
+.bg-grid-luxe {
   background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 32px 32px;
-  background-position: -1px -1px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 80%);
 }
 
-/* === Shimmer === */
-.shimmer {
-  background: linear-gradient(90deg, var(--bg-mute) 0%, var(--bg-elev) 50%, var(--bg-mute) 100%);
-  background-size: 800px 100%;
-  animation: shimmer 1.6s linear infinite;
+/* === 배경: 오로라 그라데이션 (느린 흐름) === */
+.bg-aurora {
+  background: var(--grad-aurora);
+  background-size: 200% 200%;
+  animation: aurora-flow 18s ease infinite;
 }
-@keyframes shimmer {
-  0% { background-position: -800px 0; }
-  100% { background-position: 800px 0; }
+@keyframes aurora-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-/* === 카드 홀로그래픽 효과 (TCG 카드 모티프) === */
-@property --holo-angle {
+/* === 배경: 미세 노이즈 (필름 그레인) === */
+.bg-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+}
+
+/* === 배경: 절제된 포켓볼 패턴 (다크 위, 매우 작게 + 옅게) === */
+.bg-pokeball-luxe {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><circle cx='80' cy='80' r='20' fill='none' stroke='%23FFCB05' stroke-width='1' opacity='0.06'/><line x1='60' y1='80' x2='100' y2='80' stroke='%23FFCB05' stroke-width='1' opacity='0.06'/><circle cx='80' cy='80' r='5' fill='none' stroke='%23FFCB05' stroke-width='1' opacity='0.06'/></svg>");
+  background-size: 160px 160px;
+}
+
+/* === Spotlight 효과 (마우스 추적) === */
+.spotlight {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 203, 5, 0.06),
+    transparent 40%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* === Animated Border Beam (테두리 그라데이션 추적) === */
+.beam {
+  position: relative;
+  isolation: isolate;
+}
+.beam::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle, 0deg),
+    transparent 0%,
+    rgba(255, 203, 5, 0.6) 10%,
+    rgba(238, 21, 21, 0.4) 20%,
+    transparent 40%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.beam:hover::before {
+  opacity: 1;
+  animation: beam-spin 4s linear infinite;
+}
+@property --beam-angle {
   syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
 }
+@keyframes beam-spin {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+/* === 홀로그래픽 (다크 모드용 절제 버전) === */
 .holo {
   position: relative;
   isolation: isolate;
@@ -190,13 +285,18 @@ html, body {
   background:
     conic-gradient(
       from var(--holo-angle, 0deg) at 50% 50%,
-      #ff00808a, #ff8c00a0, #ffd700a0, #00ff88a0,
-      #00d9ffa0, #7b00ffa0, #ff00808a
+      rgba(255, 80, 130, 0.25),
+      rgba(255, 180, 50, 0.25),
+      rgba(255, 230, 100, 0.25),
+      rgba(100, 230, 200, 0.25),
+      rgba(100, 200, 255, 0.25),
+      rgba(180, 100, 255, 0.25),
+      rgba(255, 80, 130, 0.25)
     );
-  mix-blend-mode: color-dodge;
+  mix-blend-mode: screen;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease-out;
+  transition: opacity 400ms ease;
   z-index: 1;
 }
 .holo::after {
@@ -206,21 +306,24 @@ html, body {
   border-radius: inherit;
   background: radial-gradient(
     circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.35) 0%,
-    transparent 45%
+    rgba(255, 255, 255, 0.18) 0%,
+    transparent 35%
   );
   mix-blend-mode: overlay;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease-out;
+  transition: opacity 400ms ease;
   z-index: 2;
 }
 .holo:hover::before {
-  opacity: 0.45;
-  animation: holoSpin 4s linear infinite;
+  opacity: 0.7;
+  animation: holoSpin 8s linear infinite;
 }
-.holo:hover::after {
-  opacity: 1;
+.holo:hover::after { opacity: 1; }
+@property --holo-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
 }
 @keyframes holoSpin {
   to {
@@ -228,25 +331,77 @@ html, body {
   }
 }
 
-/* === TCG 프리미엄 카드 프레임 (Hot pick 표시) === */
-.frame-tcg {
-  background:
-    linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
-    linear-gradient(135deg, #FFCB05 0%, #FFE680 40%, #FFCB05 60%, #B98D00 100%) border-box;
-  border: 3px solid transparent;
-  border-radius: 18px;
-  box-shadow:
-    0 0 0 1px rgba(34, 34, 36, 0.4) inset,
-    0 8px 24px rgba(238, 21, 21, 0.18);
+/* === Marquee === */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - var(--gap, 1.5rem))); }
+}
+@keyframes marquee-v {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-100% - var(--gap, 1.5rem))); }
+}
+.animate-marquee {
+  animation: marquee var(--duration, 40s) linear infinite;
+}
+.animate-marquee-v {
+  animation: marquee-v var(--duration, 40s) linear infinite;
 }
 
-/* === Recharts 다크모드 보정 === */
-[data-theme="dark"] .recharts-text { fill: #a89e8c; }
-[data-theme="dark"] .recharts-cartesian-grid line { stroke: #2a221c; }
-[data-theme="dark"] .recharts-tooltip-wrapper .recharts-default-tooltip {
-  background: #1a1612 !important;
-  border: 1px solid #3a322a !important;
+/* === Shimmer === */
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-mute) 0%, var(--bg-elev) 50%, var(--bg-mute) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.8s linear infinite;
 }
+@keyframes shimmer {
+  0% { background-position: -800px 0; }
+  100% { background-position: 800px 0; }
+}
+
+/* === Glass 모피즘 === */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--border);
+}
+
+/* === 럭셔리 보더 (그라데이션) === */
+.border-luxe {
+  background:
+    linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+    linear-gradient(135deg, rgba(255, 203, 5, 0.4), rgba(238, 21, 21, 0.2), rgba(107, 160, 224, 0.3)) border-box;
+  border: 1px solid transparent;
+}
+
+/* === 펄스 글로우 === */
+.glow-pulse {
+  box-shadow: 0 0 0 0 rgba(255, 203, 5, 0.3);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 203, 5, 0); }
+  50% { box-shadow: 0 0 24px 4px rgba(255, 203, 5, 0.18); }
+}
+
+/* === 부유 애니메이션 (slow, premium) === */
+.float-slow {
+  animation: float-slow 10s ease-in-out infinite;
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* === 회전 (slow) === */
+.spin-slow {
+  animation: spin 24s linear infinite;
+}
+
+/* === Recharts 다크 보정 === */
+.recharts-text { fill: var(--fg-muted); }
+.recharts-cartesian-grid line { stroke: var(--border); }
+.recharts-cartesian-axis-tick-line, .recharts-cartesian-axis-line { stroke: var(--border); }
 
 /* === 유틸 === */
 @supports (padding: env(safe-area-inset-bottom)) {
@@ -260,4 +415,16 @@ html, body {
 }
 
 .tnum { font-variant-numeric: tabular-nums; }
-.font-pixel { letter-spacing: 0.03em; }
+
+/* 럭셔리 헤딩 클래스 */
+.heading-luxe {
+  font-family: "Fraunces", "Pretendard Variable", serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-feature-settings: "ss01", "cv11";
+}
+
+.font-display { font-family: "Fraunces", "Pretendard Variable", "Pretendard", serif; }
+.font-ui      { font-family: "Geist", "Pretendard Variable", "Pretendard", system-ui, sans-serif; }
+.font-pixel   { font-family: "Press Start 2P", "Galmuri11", ui-monospace, monospace; letter-spacing: 0.04em; }
+.font-mono    { font-family: "JetBrains Mono", ui-monospace, monospace; }

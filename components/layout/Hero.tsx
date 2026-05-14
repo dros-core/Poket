@@ -3,177 +3,229 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Coins, Sparkles, TrendingUp } from "lucide-react";
-import { PokeballLogo, PokeballOutline } from "@/components/brand/PokeballLogo";
+import { ArrowRight, ArrowUpRight, ChevronRight, Sparkles } from "lucide-react";
+import { Spotlight } from "@/components/ui/Spotlight";
+import { BorderBeam } from "@/components/ui/BorderBeam";
+import { Marquee } from "@/components/ui/Marquee";
 import type { ResolvedImage } from "@/lib/data/imageResolver";
 
 interface Props {
-  /** 카드 fan-out에 사용할 hero 카드 이미지 3장 */
   featuredImages?: ResolvedImage[];
+  /** 상단 KPI ticker용 데이터 */
+  ticker?: Array<{ label: string; value: string; delta?: string; up?: boolean }>;
 }
 
-export function Hero({ featuredImages = [] }: Props) {
+const luxeFadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.32, 0.72, 0, 1] } }
+};
+
+const dataSources = [
+  "KREAM", "ICU.gg", "TCGBOX", "Bunjang", "Joongna", "Daangn",
+  "Mercari JP", "Rakuten", "Amazon JP", "TCGdex", "PokeAPI", "PSA"
+];
+
+export function Hero({ featuredImages = [], ticker = [] }: Props) {
   return (
-    <section className="relative overflow-hidden rounded-3xl border-2 border-[var(--border)] bg-[var(--bg-card)]">
-      {/* 배경 레이어 1: 옐로우 → 빨강 라디얼 그라데이션 */}
-      <div className="absolute inset-0 bg-radial-pkm" aria-hidden />
-      <div className="absolute inset-0 bg-radial-yellow" aria-hidden />
+    <Spotlight className="rounded-3xl border border-[var(--border)] bg-[var(--bg-card)] relative">
+      {/* 럭셔리 보더 글로우 */}
+      <BorderBeam size={120} duration={12} colorFrom="#C69B3C" colorTo="#FFCB05" />
+      <section className="relative isolate overflow-hidden rounded-3xl">
+        {/* 1. 백드롭: 미세 그리드 + 오로라 + 노이즈 */}
+        <div className="absolute inset-0 bg-grid-luxe" aria-hidden />
+        <div className="absolute inset-0 bg-aurora opacity-50" aria-hidden />
+        <div className="absolute inset-0 bg-pokeball-luxe opacity-30" aria-hidden />
 
-      {/* 배경 레이어 2: 포켓볼 도트 패턴 */}
-      <div className="absolute inset-0 bg-pokeball-tile opacity-40" aria-hidden />
+        {/* 2. 측면 글로우 (subtle) */}
+        <div
+          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full opacity-25 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(255, 203, 5, 0.25), rgba(238, 21, 21, 0.10) 40%, transparent 70%)"
+          }}
+          aria-hidden
+        />
 
-      {/* 거대 포켓볼 워터마크 — 우측 상단 */}
-      <motion.div
-        initial={{ opacity: 0, rotate: -25, scale: 0.7 }}
-        animate={{ opacity: 0.18, rotate: 0, scale: 1 }}
-        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute -right-20 -top-20 sm:-right-24 sm:-top-24 hidden sm:block pointer-events-none"
-        aria-hidden
-      >
-        <PokeballLogo size={380} />
-      </motion.div>
-
-      {/* 작은 부유 포켓볼들 */}
-      <motion.div
-        className="absolute left-8 bottom-12 hidden md:block text-pkm-red/20 animate-float pointer-events-none"
-        style={{ animationDelay: "0s" }}
-        aria-hidden
-      >
-        <PokeballOutline size={48} />
-      </motion.div>
-      <motion.div
-        className="absolute left-32 bottom-36 hidden md:block text-pkm-yellow/30 animate-float pointer-events-none"
-        style={{ animationDelay: "2s" }}
-        aria-hidden
-      >
-        <PokeballOutline size={28} />
-      </motion.div>
-
-      {/* 카드 fan-out — 우측 (lg+) */}
-      {featuredImages.length >= 3 && (
-        <div className="absolute right-10 bottom-8 hidden lg:flex items-end pointer-events-none">
-          {featuredImages.slice(0, 3).map((img, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: 60, opacity: 0, rotate: 0 }}
-              animate={{ y: 0, opacity: 1, rotate: (i - 1) * 10 }}
-              transition={{
-                delay: 0.4 + i * 0.12,
-                type: "spring",
-                stiffness: 180,
-                damping: 22
-              }}
-              className="relative rounded-xl shadow-cardLg ring-2 ring-pkm-ink/40 overflow-hidden bg-[var(--bg-card)]"
-              style={{
-                width: 132,
-                height: 184,
-                marginLeft: i === 0 ? 0 : -42,
-                zIndex: 10 - i
-              }}
-            >
-              <Image
-                src={img.url}
-                alt={img.alt}
-                fill
-                sizes="132px"
-                className="object-cover"
-                unoptimized={img.isPlaceholder}
+        {/* 3. 우측 거대 카드 컬렉션 (스택) — md+ */}
+        {featuredImages.length >= 3 && (
+          <div className="absolute right-0 top-0 bottom-0 hidden md:flex items-center justify-end pr-8 lg:pr-12 pointer-events-none w-[42%] lg:w-[40%]">
+            <div className="relative h-[420px] w-full">
+              {featuredImages.slice(0, 3).map((img, i) => {
+                const positions = [
+                  { x: "-25%", y: "8%", rot: -8, z: 1, scale: 0.88, opacity: 0.4, blur: "2px" },
+                  { x: "0%",   y: "-2%", rot: -3, z: 2, scale: 0.95, opacity: 0.75, blur: "0px" },
+                  { x: "28%",  y: "12%", rot: 6, z: 3, scale: 1.0, opacity: 1.0, blur: "0px" }
+                ][i];
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 60, rotate: 0, scale: 0.8 }}
+                    animate={{
+                      opacity: positions.opacity,
+                      y: 0,
+                      rotate: positions.rot,
+                      scale: positions.scale
+                    }}
+                    transition={{
+                      delay: 0.5 + i * 0.15,
+                      duration: 1.1,
+                      ease: [0.32, 0.72, 0, 1]
+                    }}
+                    className="absolute top-1/2 left-1/2 will-change-transform"
+                    style={{
+                      transform: `translate(-50%, -50%) translateX(${positions.x}) translateY(${positions.y})`,
+                      zIndex: positions.z,
+                      filter: `blur(${positions.blur})`
+                    }}
+                  >
+                    <div className="relative w-[180px] h-[252px] lg:w-[220px] lg:h-[308px] rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-cardLg">
+                      <Image
+                        src={img.url}
+                        alt={img.alt}
+                        fill
+                        sizes="(min-width: 1024px) 220px, 180px"
+                        className="object-cover"
+                        unoptimized={img.isPlaceholder}
+                        priority={i === 2}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    </div>
+                  </motion.div>
+                );
+              })}
+              {/* 하단 빛 (카드 하단에 글로우) */}
+              <div
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[280px] h-[80px] opacity-50 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at center, rgba(255, 203, 5, 0.3), transparent 70%)",
+                  filter: "blur(20px)"
+                }}
+                aria-hidden
               />
-            </motion.div>
-          ))}
+            </div>
+          </div>
+        )}
+
+        {/* 4. 메인 콘텐츠 */}
+        <div className="relative z-10 px-6 sm:px-10 lg:px-14 py-16 sm:py-24 lg:py-28 max-w-[640px]">
+          {/* Eyebrow — Live indicator */}
+          <motion.div initial="hidden" animate="show" variants={luxeFadeUp}>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border)] bg-[var(--bg-mute)]/60 backdrop-blur-sm">
+              <span className="relative flex w-1.5 h-1.5">
+                <span className="absolute inset-0 rounded-full bg-up animate-ping opacity-75" />
+                <span className="relative rounded-full bg-up w-1.5 h-1.5" />
+              </span>
+              <span className="font-pixel text-[9px] tracking-widest text-[var(--fg-muted)] uppercase">
+                Live · 29 Sets · KR Market
+              </span>
+            </div>
+          </motion.div>
+
+          {/* 헤드라인 — 절제된 럭셔리 */}
+          <motion.h1
+            initial="hidden"
+            animate="show"
+            variants={luxeFadeUp}
+            transition={{ delay: 0.08 }}
+            className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[0.98] text-[var(--fg)]"
+          >
+            한국 포켓몬 카드,
+            <br />
+            <span className="text-luxe italic font-medium">시세의 표준</span>
+          </motion.h1>
+
+          {/* Subheadline */}
+          <motion.p
+            initial="hidden"
+            animate="show"
+            variants={luxeFadeUp}
+            transition={{ delay: 0.15 }}
+            className="mt-6 text-base sm:text-lg text-[var(--fg-muted)] leading-relaxed max-w-lg"
+          >
+            KREAM · 너정다 · TCGBOX · 번개장터 · Mercari를 하나의 데이터 레이어로.
+            <span className="text-[var(--fg-soft)]"> 박스 EV, 90일 예측, 채널간 차익 기회</span>까지 — 매수·매도 의사결정의 전 영역.
+          </motion.p>
+
+          {/* CTA */}
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={luxeFadeUp}
+            transition={{ delay: 0.22 }}
+            className="mt-9 sm:mt-10 flex flex-wrap gap-2.5"
+          >
+            <Link
+              href="/cards"
+              className="group inline-flex items-center gap-2 bg-[var(--fg)] hover:bg-white text-[var(--bg)] px-5 sm:px-6 py-3 rounded-full font-medium text-sm shadow-lg transition-all"
+            >
+              <Sparkles size={14} strokeWidth={2.2} />
+              마켓 둘러보기
+              <ChevronRight size={14} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+            <Link
+              href="/arbitrage"
+              className="inline-flex items-center gap-2 border border-[var(--border-strong)] hover:border-[var(--accent)] hover:text-[var(--accent)] px-5 sm:px-6 py-3 rounded-full font-medium text-sm transition-colors"
+            >
+              차익 기회
+              <ArrowUpRight size={14} strokeWidth={2.2} />
+            </Link>
+          </motion.div>
+
         </div>
-      )}
 
-      <div className="relative px-6 sm:px-10 lg:px-14 py-14 sm:py-20 lg:py-24">
-        {/* 픽셀 칩 */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-1.5"
-        >
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-pixel text-[10px] bg-pkm-ink text-pkm-yellow tracking-wider shadow-card">
-            <span className="w-1.5 h-1.5 rounded-full bg-pkm-yellow animate-pulse" />
-            LIVE · 29 SETS
-          </span>
-        </motion.div>
-
-        {/* 메인 헤드라인 (Jua) */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-5 font-display text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.05] max-w-2xl"
-        >
-          한국 포켓몬 카드,
-          <br />
-          <span className="text-gradient-pkm">시세부터 매입처까지</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-5 sm:mt-6 text-base sm:text-lg text-[var(--fg-muted)] max-w-xl leading-relaxed"
-        >
-          KREAM · 너정다(ICU) · TCGBOX · 번개장터 · Mercari JP를 단일 대시보드로 통합.
-          박스 EV, 90일 예측, 채널간 차익 기회까지 — 매수/매도 의사결정의 모든 근거.
-        </motion.p>
-
-        {/* CTA — 옐로우 글로우 빨강 버튼 */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-7 sm:mt-8 flex flex-wrap gap-2.5"
-        >
-          <Link
-            href="/cards"
-            className="group inline-flex items-center gap-2 bg-pkm-red hover:bg-pkm-redDark text-white px-5 sm:px-6 py-3 rounded-2xl font-display font-bold text-base shadow-lg ring-2 ring-pkm-yellow/0 hover:ring-pkm-yellow hover:shadow-glowYellow transition-all"
-          >
-            <Sparkles size={18} strokeWidth={2.5} />
-            박스 시세 둘러보기
-            <ArrowRight size={16} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            href="/arbitrage"
-            className="inline-flex items-center gap-2 bg-[var(--bg-elev)] hover:bg-[var(--bg-mute)] border-2 border-[var(--border-strong)] hover:border-pkm-yellow px-5 sm:px-6 py-3 rounded-2xl font-display font-bold text-base transition-all"
-          >
-            <Coins size={18} strokeWidth={2.5} />
-            차익 기회
-          </Link>
-          <Link
-            href="/guide/arbitrage-playbook"
-            className="inline-flex items-center gap-2 text-[var(--fg-muted)] hover:text-[var(--fg)] px-3 py-3 rounded-2xl font-medium text-base transition-colors"
-          >
-            <TrendingUp size={16} strokeWidth={2.5} />
-            전략 가이드
-          </Link>
-        </motion.div>
-
-        {/* 데이터 소스 픽셀 칩 */}
+        {/* Data source marquee (StockX trust strip) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[var(--fg-muted)]"
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="relative z-10 border-t border-[var(--border)] py-3"
         >
-          <span className="font-pixel text-2xs uppercase tracking-wider text-[var(--fg-faint)]">
-            DATA
-          </span>
-          {["KREAM", "ICU.gg", "TCGBOX", "번개", "Mercari", "TCGdex"].map((src, i) => (
-            <motion.span
-              key={src}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 + i * 0.05 }}
-              className="font-semibold"
-            >
-              {src}
-            </motion.span>
-          ))}
+          <Marquee duration="50s" pauseOnHover className="text-[10px] tracking-[0.2em] uppercase text-[var(--fg-faint)] font-mono">
+            {dataSources.map((src) => (
+              <span key={src} className="inline-flex items-center gap-3">
+                <span>{src}</span>
+                <span className="w-1 h-1 rounded-full bg-[var(--border-strong)]" />
+              </span>
+            ))}
+          </Marquee>
         </motion.div>
-      </div>
-    </section>
+
+        {/* 5. 하단 KPI Ticker (StockX 스타일) */}
+        {ticker.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+            className="relative z-10 border-t border-[var(--border)] bg-[var(--bg-mute)]/40 backdrop-blur-sm"
+          >
+            <div className="px-6 sm:px-10 lg:px-14 py-4 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6">
+              {ticker.slice(0, 4).map((t) => (
+                <div key={t.label} className="min-w-0">
+                  <div className="text-[10px] font-pixel tracking-widest text-[var(--fg-faint)] uppercase">
+                    {t.label}
+                  </div>
+                  <div className="mt-1 flex items-baseline gap-1.5">
+                    <span className="font-mono font-medium text-base sm:text-lg text-[var(--fg)] tnum">
+                      {t.value}
+                    </span>
+                    {t.delta && (
+                      <span
+                        className={`text-xs font-mono font-medium tnum ${
+                          t.up ? "text-up" : "text-down"
+                        }`}
+                      >
+                        {t.up ? "▲" : "▼"}
+                        {t.delta}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </section>
+    </Spotlight>
   );
 }

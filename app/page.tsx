@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, TrendingUp, LineChart, Globe2, Coins, Building2, Package, Sparkles, Activity } from "lucide-react";
+import { ArrowRight, TrendingUp, LineChart, Globe2, Coins, Building2, Package, Activity, Sparkles, ArrowUpRight } from "lucide-react";
 import { Stat } from "@/components/ui/Stat";
 import { Hero } from "@/components/layout/Hero";
 import { SetCard } from "@/components/cards/SetCard";
@@ -7,7 +7,7 @@ import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
 import { ArbitrageTable } from "@/components/tables/ArbitrageTable";
 import { repository } from "@/lib/data/repository";
 import { resolveSetImage } from "@/lib/data/imageResolver";
-import { formatPct } from "@/lib/format";
+import { formatPct, formatPrice } from "@/lib/format";
 
 export default function HomePage() {
   const sets = repository.listSets();
@@ -24,91 +24,84 @@ export default function HomePage() {
       return acc + ((latest - h.set.msrpKRW) / h.set.msrpKRW) * 100;
     }, 0) / Math.max(1, validHistories.length);
   const arbitrage = repository.findArbitrageOpportunities().slice(0, 6);
+  const totalArbProfit = arbitrage.reduce((a, o) => a + o.estimatedNetProfit, 0);
+
+  // Ticker (StockX 스타일)
+  const ticker = [
+    { label: "Tracked", value: `${totalSets}`, delta: `+${totalSets - activeSets}`, up: false },
+    { label: "Avg Premium", value: formatPct(avgPremium), up: avgPremium > 0 },
+    { label: "Arb Signals", value: `${arbitrage.length}`, up: arbitrage.length > 0 },
+    { label: "Top Net", value: arbitrage.length > 0 ? formatPrice(arbitrage[0].estimatedNetProfit) : "—", up: true }
+  ];
 
   return (
-    <div className="space-y-12 sm:space-y-16">
-      <Hero featuredImages={heroImages} />
+    <div className="space-y-16 sm:space-y-24">
+      <Hero featuredImages={heroImages} ticker={ticker} />
 
-      {/* KPI */}
+      {/* Market Pulse */}
       <section>
         <Reveal>
-          <div className="flex items-end justify-between mb-4 gap-2 flex-wrap">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight">시장 온도</h2>
-              <p className="text-sm text-[var(--fg-muted)] mt-1">전체 추적 세트 기준 핵심 지표</p>
-            </div>
-          </div>
+          <SectionHeader
+            eyebrow="MARKET PULSE"
+            title="시장 온도"
+            description="전체 추적 세트 기준 핵심 지표"
+          />
         </Reveal>
-        <StaggerGroup className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StaggerGroup className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
           <StaggerItem>
             <Stat
-              label="추적 세트"
-              value={`${totalSets}종`}
-              hint={`현재 유통 ${activeSets}종 · 절판 ${totalSets - activeSets}종`}
-              icon={<Sparkles size={14} strokeWidth={2.5} />}
+              label="Tracked Sets"
+              value={`${totalSets}`}
+              hint={`Active ${activeSets} · Closed ${totalSets - activeSets}`}
+              icon={<Sparkles size={14} strokeWidth={1.8} />}
             />
           </StaggerItem>
           <StaggerItem>
             <Stat
-              label="평균 박스 프리미엄"
+              label="Avg Premium"
               value={formatPct(avgPremium)}
-              delta={`정가 대비`}
+              delta={`vs MSRP`}
               tone={avgPremium > 0 ? "up" : "down"}
-              hint="박스 시세 ÷ MSRP 평균"
-              icon={<TrendingUp size={14} strokeWidth={2.5} />}
+              hint="박스 시세 ÷ 정가 평균"
+              icon={<TrendingUp size={14} strokeWidth={1.8} />}
             />
           </StaggerItem>
           <StaggerItem>
             <Stat
-              label="차익 기회"
-              value={`${arbitrage.length}건`}
+              label="Arb Signals"
+              value={`${arbitrage.length}`}
               tone={arbitrage.length > 0 ? "warning" : "neutral"}
               hint="채널간 NET 마진 5%↑"
-              icon={<Coins size={14} strokeWidth={2.5} />}
+              icon={<Coins size={14} strokeWidth={1.8} />}
             />
           </StaggerItem>
           <StaggerItem>
             <Stat
-              label="데이터 소스"
-              value="9+"
-              hint="KREAM · 너정다 · TCGBOX · 번개 · 일본 직구"
-              icon={<Activity size={14} strokeWidth={2.5} />}
+              label="Pot. Profit"
+              value={formatPrice(totalArbProfit)}
+              tone="up"
+              hint="상위 6건 합산"
+              icon={<Activity size={14} strokeWidth={1.8} />}
             />
           </StaggerItem>
         </StaggerGroup>
       </section>
 
-      {/* 핵심 기능 */}
+      {/* Featured Sets — Bento 스타일 */}
       <section>
         <Reveal>
-          <div className="mb-4">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">한곳에서 끝내는 분석</h2>
-            <p className="text-sm text-[var(--fg-muted)] mt-1">매수/매도 의사결정의 모든 근거를 단일 인터페이스에</p>
-          </div>
-        </Reveal>
-        <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {features.map((f) => (
-            <StaggerItem key={f.href}>
-              <FeatureCard {...f} />
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
-      </section>
-
-      {/* 최신 세트 */}
-      <section>
-        <Reveal>
-          <div className="flex items-end justify-between mb-4 gap-2">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight">최신 한국판 세트</h2>
-              <p className="text-sm text-[var(--fg-muted)] mt-1">발매일 순으로 핵심 6개 표시</p>
-            </div>
+          <div className="flex items-end justify-between mb-6 gap-2 flex-wrap">
+            <SectionHeader
+              eyebrow="LATEST RELEASES"
+              title="최신 한국판 세트"
+              description="발매일 기준 핫픽 6개"
+            />
             <Link
               href="/cards"
-              className="text-sm font-semibold text-brand-600 hover:text-brand-700 inline-flex items-center gap-0.5 group"
+              className="text-sm text-[var(--fg-muted)] hover:text-[var(--accent)] inline-flex items-center gap-1 group transition-colors"
             >
               전체 보기
-              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+              <ArrowUpRight size={14} strokeWidth={1.8} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </div>
         </Reveal>
@@ -128,21 +121,40 @@ export default function HomePage() {
         </StaggerGroup>
       </section>
 
-      {/* 차익 기회 */}
+      {/* Features grid */}
+      <section>
+        <Reveal>
+          <SectionHeader
+            eyebrow="WHAT'S INSIDE"
+            title="한곳에서 끝내는 분석"
+            description="매수·매도 의사결정의 모든 근거를 단일 인터페이스에"
+          />
+        </Reveal>
+        <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
+          {features.map((f) => (
+            <StaggerItem key={f.href}>
+              <FeatureCard {...f} />
+            </StaggerItem>
+          ))}
+        </StaggerGroup>
+      </section>
+
+      {/* Arbitrage preview */}
       {arbitrage.length > 0 && (
         <section>
           <Reveal>
-            <div className="flex items-end justify-between mb-4 gap-2">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">발견된 차익 기회</h2>
-                <p className="text-sm text-[var(--fg-muted)] mt-1">수수료·배송 차감 후 NET 수익 기준</p>
-              </div>
+            <div className="flex items-end justify-between mb-6 gap-2">
+              <SectionHeader
+                eyebrow="OPPORTUNITY"
+                title="발견된 차익 기회"
+                description="수수료·배송 차감 후 NET 수익 기준"
+              />
               <Link
                 href="/arbitrage"
-                className="text-sm font-semibold text-brand-600 hover:text-brand-700 inline-flex items-center gap-0.5 group"
+                className="text-sm text-[var(--fg-muted)] hover:text-[var(--accent)] inline-flex items-center gap-1 group transition-colors"
               >
                 전체 보기
-                <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                <ArrowUpRight size={14} strokeWidth={1.8} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
             </div>
           </Reveal>
@@ -155,29 +167,45 @@ export default function HomePage() {
   );
 }
 
+function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
+  return (
+    <div>
+      <div className="font-pixel text-[10px] tracking-[0.2em] text-[var(--fg-faint)] uppercase">
+        {eyebrow}
+      </div>
+      <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium mt-2 tracking-tight text-[var(--fg)] leading-tight">
+        {title}
+      </h2>
+      <p className="text-sm sm:text-base text-[var(--fg-muted)] mt-2 leading-relaxed max-w-2xl">
+        {description}
+      </p>
+    </div>
+  );
+}
+
 const features = [
-  { icon: <TrendingUp size={18} />, title: "시세 추이", desc: "모든 세트의 박스/싱글 1년치 추세선과 변동폭을 한눈에.", href: "/trends" },
-  { icon: <LineChart size={18} />, title: "가격 예측", desc: "Holt's ES 기반 90일 예측 + 95% 신뢰구간.", href: "/predictions" },
-  { icon: <Coins size={18} />, title: "차익 기회", desc: "채널간 가격 갭 자동 탐지. 수수료·배송비 차감 후 NET 수익.", href: "/arbitrage" },
-  { icon: <Building2 size={18} />, title: "도매 진입", desc: "포켓몬코리아 공인, 아카토이, 남대문 도매상 가이드.", href: "/wholesale" },
-  { icon: <Package size={18} />, title: "소매 비교", desc: "쿠팡·11번가·G마켓·이마트·교보·KREAM 가격 비교.", href: "/retail" },
-  { icon: <Globe2 size={18} />, title: "해외 직구 가이드", desc: "Amazon JP·Mercari·eBay + 면세·관세·배대지 자동 계산.", href: "/guide/purchase-guide" }
+  { icon: <TrendingUp size={16} strokeWidth={1.8} />, title: "시세 추이", desc: "모든 세트의 박스/싱글 1년치 추세선과 변동폭을 한눈에.", href: "/trends" },
+  { icon: <LineChart size={16} strokeWidth={1.8} />, title: "가격 예측", desc: "Holt's ES 기반 90일 예측 + 95% 신뢰구간.", href: "/predictions" },
+  { icon: <Coins size={16} strokeWidth={1.8} />, title: "차익 기회", desc: "채널간 가격 갭 자동 탐지. 수수료·배송비 차감 후 NET 수익.", href: "/arbitrage" },
+  { icon: <Building2 size={16} strokeWidth={1.8} />, title: "도매 진입", desc: "포켓몬코리아 공인, 아카토이, 남대문 도매상 가이드.", href: "/wholesale" },
+  { icon: <Package size={16} strokeWidth={1.8} />, title: "소매 비교", desc: "쿠팡·11번가·G마켓·이마트·교보·KREAM 가격 비교.", href: "/retail" },
+  { icon: <Globe2 size={16} strokeWidth={1.8} />, title: "해외 직구", desc: "Amazon JP·Mercari·eBay + 면세·관세·배대지 자동 계산.", href: "/guide/purchase-guide" }
 ];
 
 function FeatureCard({ icon, title, desc, href }: (typeof features)[number]) {
   return (
-    <Link href={href} className="card card-hover group flex flex-col h-full">
-      <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-xl bg-brand-100 dark:bg-brand-950/40 text-brand-600 dark:text-brand-300 grid place-items-center shrink-0 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+    <Link href={href} className="card card-hover spotlight group flex flex-col h-full">
+      <div className="flex items-start gap-3 relative">
+        <div className="w-9 h-9 rounded-lg bg-[var(--bg-mute)] text-[var(--fg-muted)] grid place-items-center shrink-0 border border-[var(--border)] group-hover:text-[var(--accent)] group-hover:border-[var(--accent)]/30 group-hover:bg-[var(--accent-bg)] transition-all duration-500">
           {icon}
         </div>
         <div className="min-w-0">
-          <h3 className="font-bold leading-tight">{title}</h3>
-          <p className="text-sm text-[var(--fg-muted)] leading-relaxed mt-1">{desc}</p>
+          <h3 className="font-display text-lg leading-tight tracking-tight text-[var(--fg)]">{title}</h3>
+          <p className="text-sm text-[var(--fg-muted)] leading-relaxed mt-1.5">{desc}</p>
         </div>
       </div>
-      <div className="mt-auto pt-3 text-xs font-semibold text-brand-600 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-        자세히 보기 <ArrowRight size={12} strokeWidth={3} />
+      <div className="mt-auto pt-4 text-xs font-mono text-[var(--fg-muted)] group-hover:text-[var(--accent)] inline-flex items-center gap-1 transition-colors">
+        자세히 보기 <ArrowRight size={12} strokeWidth={2} className="group-hover:translate-x-0.5 transition-transform" />
       </div>
     </Link>
   );
