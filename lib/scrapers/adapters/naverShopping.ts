@@ -173,9 +173,9 @@ function isValidBoxListing(item: NaverShoppingItem, expectedMsrp: number): boole
   const blacklist = ["단팩", "1팩", "한팩", "팩단위", "카툰", "psa", "bgs", "그레이딩", "에티켓", "보호", "슬리브", "바인더", "데크", "스타터"];
   if (blacklist.some((kw) => title.includes(kw))) return false;
 
-  // 가격 범위 (정가 30% ~ 정가 5배)
+  // 가격 범위 (정가 30% ~ 정가 10배) — 절판 박스 프리미엄 보호
   if (price < expectedMsrp * 0.3) return false;
-  if (price > expectedMsrp * 5) return false;
+  if (price > expectedMsrp * 10) return false;
 
   return true;
 }
