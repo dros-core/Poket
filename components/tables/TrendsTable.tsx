@@ -46,7 +46,7 @@ export function TrendsTable({ rows }: Props) {
                   key={r.set.id}
                   initial={{ opacity: 0, y: 6 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.05 }}
+                  viewport={{ once: true, amount: 0, margin: "0px 0px -50px 0px" }}
                   transition={{ duration: 0.25, delay: Math.min(i * 0.02, 0.4) }}
                   className="border-t border-[var(--border)] hover:bg-[var(--bg-mute)]/50 transition-colors"
                 >
@@ -95,7 +95,7 @@ export function TrendsTable({ rows }: Props) {
               key={r.set.id}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
+              viewport={{ once: true, amount: 0, margin: "0px 0px -50px 0px" }}
               transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.4) }}
             >
               <Link href={`/cards/${r.set.id}`} className="card card-hover block">

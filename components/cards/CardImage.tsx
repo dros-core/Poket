@@ -1,10 +1,12 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import clsx from "clsx";
 import type { ResolvedImage } from "@/lib/data/imageResolver";
 
 interface Props {
   image: ResolvedImage;
-  /** 박스(가로형 hero) vs 단일카드(세로형) */
   variant?: "card" | "hero";
   width?: number;
   height?: number;
@@ -16,30 +18,39 @@ export function CardImage({ image, variant = "card", width, height, className, p
   const isCard = variant === "card";
   const w = width ?? (isCard ? 220 : 360);
   const h = height ?? (isCard ? 308 : 252);
+  const [errored, setErrored] = useState(false);
+  const showPlaceholder = image.isPlaceholder || errored;
 
   return (
     <div
       className={clsx(
-        "relative overflow-hidden rounded-lg bg-[var(--surface-muted)]",
-        image.isPlaceholder && "border border-dashed border-[var(--border)]",
+        "relative overflow-hidden rounded-lg bg-[var(--bg-mute)]",
+        showPlaceholder && "border border-dashed border-[var(--border)] grid place-items-center",
         className
       )}
       style={{ width: w, height: h }}
     >
-      <Image
-        src={image.url}
-        alt={image.alt}
-        width={w}
-        height={h}
-        priority={priority}
-        unoptimized={image.isPlaceholder}
-        sizes={`${w}px`}
-        className="object-contain w-full h-full"
-      />
-      {!image.isPlaceholder && (
-        <span className="absolute bottom-1 right-1 text-[9px] px-1.5 py-0.5 rounded bg-black/55 text-white opacity-0 group-hover:opacity-100 transition">
-          {image.source.replace("TCGDEX_", "TCGdex/").toLowerCase()}
-        </span>
+      {showPlaceholder ? (
+        <div className="flex flex-col items-center justify-center gap-1 text-[var(--fg-faint)] text-center p-2">
+          <svg viewBox="0 0 32 32" width={Math.min(w, h) / 3} height={Math.min(w, h) / 3} fill="currentColor" opacity="0.5">
+            <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="4" y1="16" x2="28" y2="16" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+          <span className="text-[9px] tracking-widest uppercase font-mono">No Image</span>
+        </div>
+      ) : (
+        <Image
+          src={image.url}
+          alt={image.alt}
+          width={w}
+          height={h}
+          priority={priority}
+          unoptimized={image.isPlaceholder}
+          sizes={`${w}px`}
+          className="object-contain w-full h-full"
+          onError={() => setErrored(true)}
+        />
       )}
     </div>
   );

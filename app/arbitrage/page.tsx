@@ -1,5 +1,6 @@
 import { Stat } from "@/components/ui/Stat";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
+import { PageHero } from "@/components/layout/PageHero";
 import { ArbitrageTable } from "@/components/tables/ArbitrageTable";
 import { repository } from "@/lib/data/repository";
 import { formatPrice } from "@/lib/format";
@@ -16,19 +17,15 @@ export default function ArbitragePage() {
 
   return (
     <div className="space-y-8">
-      <Reveal>
-        <header>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-100/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-3">
-            <Coins size={12} strokeWidth={2.5} />
-            아비트라지 자동 탐지
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">시세차익 기회</h1>
-          <p className="mt-3 text-sm sm:text-base text-[var(--fg-muted)] max-w-3xl leading-relaxed">
-            각 박스 SKU에 대해 채널간 매수/매도 갭을 자동 탐지합니다. 수수료(플랫폼별)와 배송비
-            차감 후 NET 수익이 +5% 이상인 케이스만 노출. 마진이 높을수록 리스크 검증을 강화하세요.
-          </p>
-        </header>
-      </Reveal>
+      <PageHero
+        eyebrow="Arbitrage Engine"
+        eyebrowIcon={<Coins size={11} strokeWidth={2.4} />}
+        title="시세차익 기회"
+        description="채널간 매수/매도 갭을 자동 탐지합니다. 수수료·배송비 차감 후 NET 수익이 +5% 이상인 케이스만. 마진이 높을수록 리스크 검증을 강화하세요."
+        mascot="zoroark"
+        mascotSize={120}
+        accent="gold"
+      />
 
       <StaggerGroup className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StaggerItem>

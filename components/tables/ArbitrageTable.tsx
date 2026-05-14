@@ -50,7 +50,7 @@ export function ArbitrageTable({ opportunities, compact = false }: Props) {
                     key={opp.id}
                     initial={{ opacity: 0, y: 8 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, amount: 0, margin: "0px 0px -50px 0px" }}
                     transition={{ duration: 0.3, delay: i * 0.03 }}
                     className="border-t border-[var(--border)] hover:bg-[var(--bg-mute)]/60 transition-colors group"
                   >
@@ -93,7 +93,7 @@ export function ArbitrageTable({ opportunities, compact = false }: Props) {
               key={opp.id}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0, margin: "0px 0px -50px 0px" }}
               transition={{ duration: 0.3, delay: i * 0.04 }}
               className="card overflow-hidden"
             >
@@ -159,7 +159,7 @@ function MarginBar({ value }: { value: number }) {
           className={clsx("h-full rounded-full", color)}
           initial={{ width: 0 }}
           whileInView={{ width: `${pct}%` }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0, margin: "0px 0px -50px 0px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         />
       </div>

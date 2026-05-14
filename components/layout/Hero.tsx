@@ -8,6 +8,7 @@ import { Spotlight } from "@/components/ui/Spotlight";
 import { BorderBeam } from "@/components/ui/BorderBeam";
 import { Marquee } from "@/components/ui/Marquee";
 import { PokeballOutline } from "@/components/brand/PokeballLogo";
+import { PokemonMascot } from "@/components/brand/PokemonMascot";
 import { ENERGY_TYPES } from "@/components/brand/EnergyIcons";
 import type { ResolvedImage } from "@/lib/data/imageResolver";
 
@@ -168,9 +169,41 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
               >
                 <PokeballOutline size={48} />
               </motion.div>
+
+              {/* 피카츄 마스코트 — 카드 옆 작게 */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                animate={{ opacity: 0.9, scale: 1, y: 0 }}
+                transition={{ delay: 1.0, duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
+                className="absolute bottom-0 -left-4 lg:left-0 pointer-events-none"
+                style={{ zIndex: 4 }}
+              >
+                <div className="relative">
+                  <div
+                    className="absolute -inset-6 rounded-full opacity-60 pointer-events-none"
+                    style={{
+                      background: "radial-gradient(circle, rgba(255,203,5,0.45) 0%, transparent 60%)",
+                      filter: "blur(20px)"
+                    }}
+                    aria-hidden
+                  />
+                  <PokemonMascot pokemon="pikachu" size={130} floating priority />
+                </div>
+              </motion.div>
             </div>
           </div>
         )}
+
+        {/* 좌측 큰 마스코트 — 메가리자몽 분위기 (절제된 opacity) */}
+        <motion.div
+          initial={{ opacity: 0, x: -40, scale: 0.8 }}
+          animate={{ opacity: 0.08, x: 0, scale: 1 }}
+          transition={{ delay: 0.6, duration: 1.4 }}
+          className="absolute -left-32 bottom-0 hidden lg:block pointer-events-none"
+          aria-hidden
+        >
+          <PokemonMascot pokemon="charizard" size={420} />
+        </motion.div>
 
         {/* 5. 메인 콘텐츠 */}
         <div className="relative z-10 px-6 sm:px-10 lg:px-14 py-12 sm:py-20 lg:py-24 max-w-full md:max-w-[600px]">
@@ -212,13 +245,13 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
             <span className="text-[var(--fg-soft)]"> 박스 EV, 90일 예측, 채널간 차익 기회</span>까지 — 매수·매도 의사결정의 전 영역.
           </motion.p>
 
-          {/* 모바일 메인 카드 */}
+          {/* 모바일 메인 카드 + 피카츄 */}
           {mainCard && (
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.4, duration: 1, ease: [0.32, 0.72, 0, 1] }}
-              className="md:hidden mt-8 flex justify-center"
+              className="md:hidden mt-8 flex justify-center items-end gap-2"
             >
               <div className="relative">
                 <div
@@ -234,8 +267,8 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
                   <Image
                     src={mainCard.url}
                     alt={mainCard.alt}
-                    width={220}
-                    height={308}
+                    width={200}
+                    height={280}
                     className="block"
                     unoptimized={mainCard.isPlaceholder}
                     priority
@@ -248,6 +281,9 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
                     }}
                   />
                 </div>
+              </div>
+              <div className="-mb-2">
+                <PokemonMascot pokemon="pikachu" size={86} floating />
               </div>
             </motion.div>
           )}

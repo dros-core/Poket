@@ -1,5 +1,6 @@
 import { LineChart, Sparkles } from "lucide-react";
 import { Reveal } from "@/components/ui/motion";
+import { PageHero } from "@/components/layout/PageHero";
 import { PredictionsTable, type PredictionRow } from "@/components/tables/PredictionsTable";
 import { repository } from "@/lib/data/repository";
 
@@ -23,19 +24,15 @@ export default function PredictionsPage() {
 
   return (
     <div className="space-y-8">
-      <Reveal>
-        <header>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-100/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-3">
-            <LineChart size={12} strokeWidth={2.5} />
-            가격 예측
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">90일 가격 예측</h1>
-          <p className="mt-3 text-sm sm:text-base text-[var(--fg-muted)] max-w-3xl leading-relaxed">
-            Holt&apos;s Linear Exponential Smoothing 기반 90일 예측 + 95% 신뢰구간과 모델 시그널을 함께 제시합니다.
-            참고용이며 실제 거래 결정은 추가 시장 정보와 함께 판단하세요.
-          </p>
-        </header>
-      </Reveal>
+      <PageHero
+        eyebrow="Price Forecast"
+        eyebrowIcon={<LineChart size={11} strokeWidth={2.4} />}
+        title="90일 가격 예측"
+        description="Holt's Linear ES 기반 90일 예측 + 95% 신뢰구간 + 모델 시그널. 참고용이며 실제 거래 결정은 추가 시장 정보와 함께 판단."
+        mascot="mew"
+        mascotSize={120}
+        accent="purple"
+      />
 
       <Reveal>
         <PredictionsTable rows={rows} />

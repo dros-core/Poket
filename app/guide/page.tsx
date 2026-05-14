@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { PageHero } from "@/components/layout/PageHero";
+import { StaggerGroup, StaggerItem } from "@/components/ui/motion";
 import { guides } from "@/data/seed/guides";
 
 export const metadata = { title: "가이드 모음 | Poket" };
@@ -16,22 +19,32 @@ const categoryLabel: Record<string, string> = {
 export default function GuideIndexPage() {
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="text-2xl font-bold">가이드</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          한국 포켓몬 카드 시장에서 매수/매도 결정을 내리기 위한 전 영역(시장·전략·법무·그레이딩·데이터) 핵심 자료.
-        </p>
-      </header>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <PageHero
+        eyebrow="Knowledge Base"
+        eyebrowIcon={<BookOpen size={11} strokeWidth={2.4} />}
+        title="플레이북 · 가이드"
+        description="한국 포켓몬 카드 시장에서 매수·매도 결정을 내리기 위한 전 영역 — 시장·전략·법무·그레이딩·데이터 — 핵심 자료."
+        mascot="lucario"
+        mascotSize={120}
+        accent="blue"
+      />
+      <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {guides.map((g) => (
-          <Link key={g.slug} href={`/guide/${g.slug}`} className="card hover:-translate-y-0.5 transition">
-            <Badge variant="primary">{categoryLabel[g.category]}</Badge>
-            <h2 className="font-bold text-lg mt-2">{g.title}</h2>
-            <p className="text-sm text-ink-muted mt-2 leading-relaxed">{g.intro}</p>
-            <div className="mt-3 text-xs text-ink-muted">{g.sections.length}개 섹션</div>
-          </Link>
+          <StaggerItem key={g.slug}>
+            <Link
+              href={`/guide/${g.slug}`}
+              className="card card-hover block h-full"
+            >
+              <Badge variant="primary">{categoryLabel[g.category]}</Badge>
+              <h2 className="font-display text-xl mt-3 text-[var(--fg)] tracking-tight">{g.title}</h2>
+              <p className="text-sm text-[var(--fg-muted)] mt-2 leading-relaxed">{g.intro}</p>
+              <div className="mt-3 text-[10px] font-mono uppercase tracking-widest text-[var(--fg-faint)]">
+                {g.sections.length} sections
+              </div>
+            </Link>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </div>
   );
 }

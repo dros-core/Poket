@@ -1,6 +1,7 @@
 import { Package } from "lucide-react";
 import { ChannelCard } from "@/components/cards/ChannelCard";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
+import { PageHero } from "@/components/layout/PageHero";
 import { repository } from "@/lib/data/repository";
 
 export const metadata = { title: "소매·P2P·해외 구매처 | Poket" };
@@ -14,18 +15,15 @@ export default function RetailPage() {
 
   return (
     <div className="space-y-12">
-      <Reveal>
-        <header>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-100/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-3">
-            <Package size={12} strokeWidth={2.5} />
-            소매 / P2P / 해외
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">소매 · P2P · 해외 구매처</h1>
-          <p className="mt-3 text-sm sm:text-base text-[var(--fg-muted)] max-w-3xl leading-relaxed">
-            박스 1개부터 정가 매수 가능한 채널 모음. 적립/할인 활용 시 정가 -10% 효과.
-          </p>
-        </header>
-      </Reveal>
+      <PageHero
+        eyebrow="Retail · P2P · Overseas"
+        eyebrowIcon={<Package size={11} strokeWidth={2.4} />}
+        title="소매 · P2P · 해외 구매처"
+        description="박스 1개부터 정가 매수 가능한 채널 모음. 적립·할인 활용 시 정가 -10% 효과."
+        mascot="eevee"
+        mascotSize={120}
+        accent="gold"
+      />
 
       <Section title="온라인 소매" desc="공식 직영 + 종합몰. 정가 ±5% 거래의 표준." items={retailOnline} />
       <Section title="오프라인 소매" desc="마트·문구·서점·공인 카드샵." items={retailOffline} />

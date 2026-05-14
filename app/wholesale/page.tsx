@@ -1,5 +1,6 @@
 import { ChannelCard } from "@/components/cards/ChannelCard";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
+import { PageHero } from "@/components/layout/PageHero";
 import { repository } from "@/lib/data/repository";
 import { Building2 } from "lucide-react";
 
@@ -9,21 +10,15 @@ export default function WholesalePage() {
   const channels = repository.listChannels().filter((c) => c.type === "WHOLESALE");
   return (
     <div className="space-y-8">
-      <Reveal>
-        <header>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-100/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-3">
-            <Building2 size={12} strokeWidth={2.5} />
-            도매 채널
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">도매 구매처</h1>
-          <p className="mt-3 text-sm sm:text-base text-[var(--fg-muted)] max-w-3xl leading-relaxed">
-            한국에서 박스/카툰 단위로 매입 가능한 도매 채널. 공식 디스트리뷰터(포켓몬코리아) 외 일반 진입 가능한 채널 중심.
-          </p>
-          <p className="mt-2 text-xs text-[var(--fg-faint)]">
-            ※ 공인 카드샵 등록은 사업자등록 + 매장 운영 이력이 필수. 일반 셀러는 아카토이·완구 도매상에서 시작 권장.
-          </p>
-        </header>
-      </Reveal>
+      <PageHero
+        eyebrow="Wholesale"
+        eyebrowIcon={<Building2 size={11} strokeWidth={2.4} />}
+        title="도매 구매처"
+        description="한국에서 박스·카툰 단위로 매입 가능한 도매 채널. 공인 카드샵 등록은 사업자등록 + 매장 운영 이력 필수. 일반 셀러는 아카토이·완구 도매상에서 시작 권장."
+        mascot="koraidon"
+        mascotSize={130}
+        accent="red"
+      />
       <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {channels.map((c) => (
           <StaggerItem key={c.id}>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
+import { PageHero } from "@/components/layout/PageHero";
 import { TrendsTable, type TrendRow } from "@/components/tables/TrendsTable";
 import { repository } from "@/lib/data/repository";
 import { formatPct } from "@/lib/format";
@@ -35,18 +36,15 @@ export default function TrendsPage() {
 
   return (
     <div className="space-y-8">
-      <Reveal>
-        <header>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-100/80 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-3">
-            <BarChart3 size={12} strokeWidth={2.5} />
-            시세 추이
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">시세 추이 분석</h1>
-          <p className="mt-3 text-sm sm:text-base text-[var(--fg-muted)] max-w-3xl leading-relaxed">
-            한국 정식 발매 박스의 30일/90일/누적 변동률. 정가 대비 프리미엄과 절판 효과를 한눈에 확인합니다.
-          </p>
-        </header>
-      </Reveal>
+      <PageHero
+        eyebrow="Market Trends"
+        eyebrowIcon={<BarChart3 size={11} strokeWidth={2.4} />}
+        title="시세 추이 분석"
+        description="한국 정식 발매 박스의 30일·90일·누적 변동률. 정가 대비 프리미엄과 절판 효과를 한눈에."
+        mascot="mewtwo"
+        mascotSize={120}
+        accent="purple"
+      />
 
       <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <StaggerItem>

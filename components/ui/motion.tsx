@@ -11,7 +11,7 @@ export const fadeUp: Variants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
   }
 };
 
@@ -22,13 +22,19 @@ export const fadeIn: Variants = {
 
 export const scaleIn: Variants = {
   hidden: { opacity: 0, scale: 0.96 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }
+  show: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }
 };
 
 export const stagger: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } }
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.02 } }
 };
+
+/**
+ * 뷰포트 진입 트리거 — 모바일 안정성을 위해
+ * amount: 0 (요소 일부만 보이면 트리거) + margin (뷰포트 하단 100px 안쪽이라도 트리거)
+ */
+const SAFE_VIEWPORT = { once: true, amount: 0, margin: "0px 0px -100px 0px" } as const;
 
 interface RevealProps extends HTMLMotionProps<"div"> {
   children: ReactNode;
@@ -36,15 +42,12 @@ interface RevealProps extends HTMLMotionProps<"div"> {
   variants?: Variants;
 }
 
-/**
- * 스크롤 인 화면에 들어오면 단 1회 등장
- */
 export function Reveal({ children, delay = 0, variants = fadeUp, className, ...rest }: RevealProps) {
   return (
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={SAFE_VIEWPORT}
       variants={variants}
       transition={{ delay }}
       className={className}
@@ -55,15 +58,12 @@ export function Reveal({ children, delay = 0, variants = fadeUp, className, ...r
   );
 }
 
-/**
- * 자식 stagger 컨테이너
- */
 export function StaggerGroup({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={SAFE_VIEWPORT}
       variants={stagger}
       className={className}
     >
