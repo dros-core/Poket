@@ -5,6 +5,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { StaggerGroup, StaggerItem } from "@/components/ui/motion";
 import { repository } from "@/lib/data/repository";
 import { resolveSetImage, resolveSetLogo, resolveBoxPhoto } from "@/lib/data/imageResolver";
+import { getBoxBlurPlaceholder } from "@/data/seed/boxBlurPlaceholders";
 import {
   applyFilter,
   groupBySeriesGroup,
@@ -104,6 +105,7 @@ export default function CardsPage({ searchParams }: Props) {
                     const image = resolveSetImage(s);
                     const logoUrl = resolveSetLogo(s);
                     const boxPhotoUrl = resolveBoxPhoto(s);
+                    const boxPhotoBlurDataURL = getBoxBlurPlaceholder(s.id);
                     return (
                       <StaggerItem key={s.id}>
                         <SetCard
@@ -114,6 +116,7 @@ export default function CardsPage({ searchParams }: Props) {
                           image={image}
                           logoUrl={logoUrl}
                           boxPhotoUrl={boxPhotoUrl}
+                          boxPhotoBlurDataURL={boxPhotoBlurDataURL}
                         />
                       </StaggerItem>
                     );
