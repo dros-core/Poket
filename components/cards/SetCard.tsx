@@ -18,9 +18,10 @@ interface Props {
   image: ResolvedImage;
   logoUrl?: string;
   boxPhotoUrl?: string;
+  boxPhotoBlurDataURL?: string;
 }
 
-export function SetCard({ set, latestPrice, prevPrice, sparkData, image, logoUrl, boxPhotoUrl }: Props) {
+export function SetCard({ set, latestPrice, prevPrice, sparkData, image, logoUrl, boxPhotoUrl, boxPhotoBlurDataURL }: Props) {
   const change = prevPrice ? ((latestPrice - prevPrice) / prevPrice) * 100 : 0;
   const changeAbs = latestPrice - prevPrice;
   const isUp = change > 0.5;
@@ -65,6 +66,7 @@ export function SetCard({ set, latestPrice, prevPrice, sparkData, image, logoUrl
               cardImage={image}
               logoUrl={logoUrl}
               boxPhotoUrl={boxPhotoUrl}
+              boxPhotoBlurDataURL={boxPhotoBlurDataURL}
               width={108}
               height={144}
               interactive
