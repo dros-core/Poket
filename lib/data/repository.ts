@@ -9,7 +9,12 @@ import {
 import { forecastPrice } from "@/lib/prediction/forecast";
 import { calculateBoxEV, type EVResult } from "@/lib/prediction/expectedValue";
 import { detectArbitrageFromObservations } from "@/lib/prediction/arbitrage";
-import { isLiveDataEnabled, fetchKreamBoxPrice } from "@/lib/scrapers";
+import {
+  isLiveDataEnabled,
+  fetchKreamBoxPrice,
+  fetchNaverShoppingPrice
+} from "@/lib/scrapers";
+import { aggregatePrices, type AggregatedPrice } from "./priceAggregator";
 import type {
   Card,
   CardSet,
@@ -21,13 +26,16 @@ import type {
 
 /**
  * 도메인 데이터 접근 레이어
- * - 기본: seed 데이터에서 조회 (동기)
- * - `POKET_USE_LIVE=true` + 비동기 메서드 사용 시 live 어댑터 결과를 prepend
  *
- * 마이그레이션 가이드:
- *   기존 페이지는 동기 `repository.getBoxObservations(setId)` 유지
- *   실시세가 필요한 페이지는 `repository.getBoxObservationsLive(setId)` 사용
- *   live 결과는 seed 보다 먼저 (최신성 우선) 정렬되어 반환
+ * 호출 모드:
+ *   1) `repository.getBoxObservations(setId)` — 동기, seed 데이터만 (기존 페이지 호환)
+ *   2) `repository.getBoxObservationsLive(setId)` — 비동기, 다중 어댑터 + seed (실시세)
+ *   3) `repository.getAggregatedBoxPrice(setId)` — 비동기, 가중평균 + 신뢰도 (대시보드용)
+ *
+ * 활성화:
+ *   POKET_USE_LIVE=true
+ *   NAVER_CLIENT_ID + NAVER_CLIENT_SECRET  (네이버쇼핑 primary)
+ *   KREAM_PRODUCT_MAP 등록  (KREAM 보조)
  */
 
 export const repository = {
@@ -64,21 +72,60 @@ export const repository = {
   },
 
   /**
-   * Live (KREAM) + seed 박스 시세를 통합 반환.
-   * - POKET_USE_LIVE=true 일 때만 live fetch 시도
-   * - KREAM 미매핑/에러 시 seed 만 반환 (graceful degradation)
-   * - live 결과는 배열 앞쪽 (최신성 우선)
+   * 모든 활성 어댑터를 호출하여 박스 시세를 통합 반환.
+   *
+   * 우선순위 (배열 앞 = 최신성/신뢰도 높음):
+   *   1) 네이버쇼핑 (primary, 합법 OAuth)
+   *   2) KREAM (사용자 수동 매핑)
+   *   3) seed (합성 시계열)
+   *
+   * 어느 어댑터든 실패해도 throw 안 함 (graceful degradation).
    */
   async getBoxObservationsLive(setId: string): Promise<PriceObservation[]> {
     const seed = buildBoxObservations(setId);
     if (!isLiveDataEnabled()) return seed;
+
+    const set = getSetById(setId);
+    const msrp = set?.msrpKRW ?? 117_000;
+
+    const results: PriceObservation[] = [];
+
+    // 1) 네이버쇼핑 (primary)
     try {
-      const live = await fetchKreamBoxPrice(setId);
-      return [...live.observations, ...seed];
+      const naver = await fetchNaverShoppingPrice(setId, msrp);
+      results.push(...naver.observations);
     } catch (err) {
-      console.warn(`[repository] live fetch 실패 (${setId}):`, err instanceof Error ? err.message : err);
-      return seed;
+      console.warn(`[repository] naver-shopping 실패 (${setId}):`, err instanceof Error ? err.message : err);
     }
+
+    // 2) KREAM (보조)
+    try {
+      const kream = await fetchKreamBoxPrice(setId);
+      results.push(...kream.observations);
+    } catch (err) {
+      console.warn(`[repository] kream 실패 (${setId}):`, err instanceof Error ? err.message : err);
+    }
+
+    return [...results, ...seed];
+  },
+
+  /**
+   * 다중 소스 가중평균 + 신뢰도 점수를 반환.
+   * UI 대시보드에서 "현재 시세 ± 신뢰도" 표시용.
+   *
+   * @returns null = 데이터 없음 / 모든 어댑터 비활성
+   */
+  async getAggregatedBoxPrice(setId: string): Promise<AggregatedPrice | null> {
+    const observations = await this.getBoxObservationsLive(setId);
+    // seed 제외 — 실시세 (live) 만 집계 대상
+    const liveOnly = observations.filter(
+      (o) =>
+        o.marketplace === "NAVER_SHOPPING" ||
+        o.note?.includes("KREAM") ||
+        o.source?.startsWith("http")
+    );
+    if (liveOnly.length === 0) return null;
+    return aggregatePrices(liveOnly);
   },
 
   getAllLatestBoxObservations(): PriceObservation[] {
