@@ -1,6 +1,6 @@
 {
-  "__lang": "ko",
-  "__fetchedAt": "2026-05-14T07:30:22.036Z",
+  "__lang": "ja",
+  "__fetchedAt": "2026-05-14T08:59:04.127Z",
   "cardCount": {
     "firstEd": 0,
     "holo": 0,
@@ -15,10 +15,10 @@
     "expanded": false,
     "standard": false
   },
-  "name": "사이버저지",
+  "name": "サイバージャッジ",
   "releaseDate": "2024-01-26",
   "serie": {
     "id": "SV",
-    "name": "스칼렛・바이올렛"
+    "name": "ポケモンカードゲーム スカーレット&バイオレット"
   }
 }

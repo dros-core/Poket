@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, TrendingUp, LineChart, Coins, Building2, Package, BookOpen, LayoutDashboard, Sparkles } from "lucide-react";
 import clsx from "clsx";
 import { ThemeToggle } from "./ThemeToggle";
+import { PokeballLogo } from "@/components/brand/PokeballLogo";
 
 const navLinks = [
   { href: "/", label: "대시보드", icon: LayoutDashboard },
@@ -56,15 +57,14 @@ export function Header() {
       >
         <div className="mx-auto max-w-7xl px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
           {/* 로고 */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0" aria-label="Poket 홈">
-            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700 grid place-items-center text-white font-extrabold shadow-card group-hover:shadow-glow transition-shadow">
-              <span className="relative z-10">P</span>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="Poket 홈">
+            <div className="transition-transform duration-500 ease-out-expo group-hover:rotate-[20deg] group-hover:scale-110">
+              <PokeballLogo size={36} />
             </div>
             <div className="leading-tight">
-              <div className="font-extrabold tracking-tight text-base sm:text-lg">Poket</div>
-              <div className="text-[10px] text-[var(--fg-muted)] -mt-0.5 hidden sm:block">
-                한국 포켓몬카드 시세
+              <div className="font-display tracking-tight text-lg sm:text-xl">Poket</div>
+              <div className="text-[10px] text-[var(--fg-muted)] -mt-0.5 hidden sm:block font-pixel">
+                KR · POKE · MARKET
               </div>
             </div>
           </Link>

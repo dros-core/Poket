@@ -12,6 +12,7 @@ import { formatPct } from "@/lib/format";
 export default function HomePage() {
   const sets = repository.listSets();
   const featuredSets = [...sets].sort((a, b) => b.releaseDate.localeCompare(a.releaseDate)).slice(0, 6);
+  const heroImages = featuredSets.slice(0, 3).map((s) => resolveSetImage(s));
 
   const allHistories = sets.map((s) => ({ set: s, history: repository.getBoxPriceHistory(s.id, 60) }));
   const validHistories = allHistories.filter((h) => h.history.length >= 4);
@@ -26,7 +27,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12 sm:space-y-16">
-      <Hero />
+      <Hero featuredImages={heroImages} />
 
       {/* KPI */}
       <section>

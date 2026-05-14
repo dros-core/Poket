@@ -1,6 +1,6 @@
 {
-  "__lang": "ko",
-  "__fetchedAt": "2026-05-14T07:30:20.547Z",
+  "__lang": "ja",
+  "__fetchedAt": "2026-05-14T08:59:02.300Z",
   "cardCount": {
     "firstEd": 0,
     "holo": 0,
@@ -12,478 +12,573 @@
   "cards": [
     {
       "id": "SV4K-001",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/001",
       "localId": "001",
-      "name": "야나프"
+      "name": "ヤナップ"
     },
     {
       "id": "SV4K-002",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/002",
       "localId": "002",
-      "name": "야나키"
+      "name": "ヤナッキー"
     },
     {
       "id": "SV4K-003",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/003",
       "localId": "003",
-      "name": "마라카치"
+      "name": "マラカッチ"
     },
     {
       "id": "SV4K-004",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/004",
       "localId": "004",
-      "name": "돌살이"
+      "name": "イシズマイ"
     },
     {
       "id": "SV4K-005",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/005",
       "localId": "005",
-      "name": "암팰리스"
+      "name": "イワパレス"
     },
     {
       "id": "SV4K-006",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/006",
       "localId": "006",
-      "name": "달콤아"
+      "name": "アマカジ"
     },
     {
       "id": "SV4K-007",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/007",
       "localId": "007",
-      "name": "달무리나"
+      "name": "アママイコ"
     },
     {
       "id": "SV4K-008",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/008",
       "localId": "008",
-      "name": "콩알뚜기"
+      "name": "マメバッタ"
     },
     {
       "id": "SV4K-009",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/009",
       "localId": "009",
-      "name": "콩알뚜기"
+      "name": "マメバッタ"
     },
     {
       "id": "SV4K-010",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/010",
       "localId": "010",
-      "name": "마그비"
+      "name": "ブビィ"
     },
     {
       "id": "SV4K-011",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/011",
       "localId": "011",
-      "name": "둔타"
+      "name": "ドンメル"
     },
     {
       "id": "SV4K-012",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/012",
       "localId": "012",
-      "name": "폭타"
+      "name": "バクーダ"
     },
     {
       "id": "SV4K-013",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/013",
       "localId": "013",
-      "name": "카르본"
+      "name": "カルボウ"
     },
     {
       "id": "SV4K-014",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/014",
       "localId": "014",
-      "name": "카르본"
+      "name": "カルボウ"
     },
     {
       "id": "SV4K-015",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/015",
       "localId": "015",
-      "name": "카디나르마 ex"
+      "name": "グレンアルマex"
     },
     {
       "id": "SV4K-016",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/016",
       "localId": "016",
-      "name": "위유이"
+      "name": "イーユイ"
     },
     {
       "id": "SV4K-017",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/017",
       "localId": "017",
-      "name": "쏘드라"
+      "name": "タッツー"
     },
     {
       "id": "SV4K-018",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/018",
       "localId": "018",
-      "name": "시드라"
+      "name": "シードラ"
     },
     {
       "id": "SV4K-019",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/019",
       "localId": "019",
-      "name": "킹드라"
+      "name": "キングドラ"
     },
     {
       "id": "SV4K-020",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/020",
       "localId": "020",
-      "name": "달코퀸 ex"
+      "name": "アマージョex"
     },
     {
       "id": "SV4K-021",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/021",
       "localId": "021",
-      "name": "꼬시레"
+      "name": "コソクムシ"
     },
     {
       "id": "SV4K-022",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/022",
       "localId": "022",
-      "name": "갑주무사 ex"
+      "name": "グソクムシャex"
     },
     {
       "id": "SV4K-023",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/023",
       "localId": "023",
-      "name": "바다그다"
+      "name": "ウミディグダ"
     },
     {
       "id": "SV4K-024",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/024",
       "localId": "024",
-      "name": "바다그다"
+      "name": "ウミディグダ"
     },
     {
       "id": "SV4K-025",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/025",
       "localId": "025",
-      "name": "바닥트리오"
+      "name": "ウミトリオ"
     },
     {
       "id": "SV4K-026",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/026",
       "localId": "026",
-      "name": "가비루사"
+      "name": "ミガルーサ"
     },
     {
       "id": "SV4K-027",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/027",
       "localId": "027",
-      "name": "라티오스"
+      "name": "ラティオス"
     },
     {
       "id": "SV4K-028",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/028",
       "localId": "028",
-      "name": "또르박쥐"
+      "name": "コロモリ"
     },
     {
       "id": "SV4K-029",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/029",
       "localId": "029",
-      "name": "맘박쥐"
+      "name": "ココロモリ"
     },
     {
       "id": "SV4K-030",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/030",
       "localId": "030",
-      "name": "데스마스"
+      "name": "デスマス"
     },
     {
       "id": "SV4K-031",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/031",
       "localId": "031",
-      "name": "데스니칸 ex"
+      "name": "デスカーンex"
     },
     {
       "id": "SV4K-032",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/032",
       "localId": "032",
-      "name": "우렁찬꼬리"
+      "name": "サケブシッポ"
     },
     {
       "id": "SV4K-033",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/033",
       "localId": "033",
-      "name": "비조푸"
+      "name": "コジョフー"
     },
     {
       "id": "SV4K-034",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/034",
       "localId": "034",
-      "name": "비조도"
+      "name": "コジョンド"
     },
     {
       "id": "SV4K-035",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/035",
       "localId": "035",
-      "name": "때때무노"
+      "name": "タタッコ"
     },
     {
       "id": "SV4K-036",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/036",
       "localId": "036",
-      "name": "케오퍼스"
+      "name": "オトスパス"
     },
     {
       "id": "SV4K-037",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/037",
       "localId": "037",
-      "name": "베베솔트"
+      "name": "コジオ"
     },
     {
       "id": "SV4K-038",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/038",
       "localId": "038",
-      "name": "베베솔트"
+      "name": "コジオ"
     },
     {
       "id": "SV4K-039",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/039",
       "localId": "039",
-      "name": "스태솔트"
+      "name": "ジオヅム"
     },
     {
       "id": "SV4K-040",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/040",
       "localId": "040",
-      "name": "콜로솔트"
+      "name": "キョジオーン"
     },
     {
       "id": "SV4K-041",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/041",
       "localId": "041",
-      "name": "땅을기는날개"
+      "name": "チヲハウハネ"
     },
     {
       "id": "SV4K-042",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/042",
       "localId": "042",
-      "name": "모래털가죽 ex"
+      "name": "スナノケガワex"
     },
     {
       "id": "SV4K-043",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/043",
       "localId": "043",
-      "name": "딩루"
+      "name": "ディンルー"
     },
     {
       "id": "SV4K-044",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/044",
       "localId": "044",
-      "name": "주뱃"
+      "name": "ズバット"
     },
     {
       "id": "SV4K-045",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/045",
       "localId": "045",
-      "name": "골뱃"
+      "name": "ゴルバット"
     },
     {
       "id": "SV4K-046",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/046",
       "localId": "046",
-      "name": "크로뱃"
+      "name": "クロバット"
     },
     {
       "id": "SV4K-047",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/047",
       "localId": "047",
-      "name": "쌔비냥"
+      "name": "チョロネコ"
     },
     {
       "id": "SV4K-048",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/048",
       "localId": "048",
-      "name": "레파르다스"
+      "name": "レパルダス"
     },
     {
       "id": "SV4K-049",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/049",
       "localId": "049",
-      "name": "깨봉이"
+      "name": "ヤブクロン"
     },
     {
       "id": "SV4K-050",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/050",
       "localId": "050",
-      "name": "더스트나"
+      "name": "ダストダス"
     },
     {
       "id": "SV4K-051",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/051",
       "localId": "051",
-      "name": "모르페코"
+      "name": "モルペコ"
     },
     {
       "id": "SV4K-052",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/052",
       "localId": "052",
-      "name": "엑스레그"
+      "name": "エクスレッグ"
     },
     {
       "id": "SV4K-053",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/053",
       "localId": "053",
-      "name": "사나운버섯"
+      "name": "アラブルタケ"
     },
     {
       "id": "SV4K-054",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/054",
       "localId": "054",
-      "name": "고동치는달 ex"
+      "name": "トドロクツキex"
     },
     {
       "id": "SV4K-055",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/055",
       "localId": "055",
-      "name": "소곤룡"
+      "name": "ゴニョニョ"
     },
     {
       "id": "SV4K-056",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/056",
       "localId": "056",
-      "name": "노공룡"
+      "name": "ドゴーム"
     },
     {
       "id": "SV4K-057",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/057",
       "localId": "057",
-      "name": "폭음룡"
+      "name": "バクオング"
     },
     {
       "id": "SV4K-058",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/058",
       "localId": "058",
-      "name": "얼루기"
+      "name": "パッチール"
     },
     {
       "id": "SV4K-059",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/059",
       "localId": "059",
-      "name": "대지의 그릇"
+      "name": "カビゴンドール"
     },
     {
       "id": "SV4K-060",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/060",
       "localId": "060",
-      "name": "잠만보인형"
+      "name": "大地の器"
     },
     {
       "id": "SV4K-061",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/061",
       "localId": "061",
-      "name": "기술머신 데볼루션"
+      "name": "ブーストエナジー 古代"
     },
     {
       "id": "SV4K-062",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/062",
       "localId": "062",
-      "name": "부스트에너지 고대"
+      "name": "まけんきチョッキ"
     },
     {
       "id": "SV4K-063",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/063",
       "localId": "063",
-      "name": "오기조끼"
+      "name": "ワザマシン デヴォリューション"
     },
     {
       "id": "SV4K-064",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/064",
       "localId": "064",
-      "name": "멜로코"
+      "name": "オーリム博士の気迫"
     },
     {
       "id": "SV4K-065",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/065",
       "localId": "065",
-      "name": "올림박사의 기백"
+      "name": "センリ"
     },
     {
       "id": "SV4K-066",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/066",
       "localId": "066",
-      "name": "종길"
+      "name": "メロコ"
     },
     {
       "id": "SV4K-067",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/067",
       "localId": "067",
-      "name": "암팰리스"
+      "name": "イワパレス"
     },
     {
       "id": "SV4K-068",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/068",
       "localId": "068",
-      "name": "마그비"
+      "name": "ブビィ"
     },
     {
       "id": "SV4K-069",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/069",
       "localId": "069",
-      "name": "꼬시레"
+      "name": "コソクムシ"
     },
     {
       "id": "SV4K-070",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/070",
       "localId": "070",
-      "name": "가비루사"
+      "name": "ミガルーサ"
     },
     {
       "id": "SV4K-071",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/071",
       "localId": "071",
-      "name": "우렁찬꼬리"
+      "name": "サケブシッポ"
     },
     {
       "id": "SV4K-072",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/072",
       "localId": "072",
-      "name": "비조도"
+      "name": "コジョンド"
     },
     {
       "id": "SV4K-073",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/073",
       "localId": "073",
-      "name": "콜로솔트"
+      "name": "キョジオーン"
     },
     {
       "id": "SV4K-074",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/074",
       "localId": "074",
-      "name": "땅을기는날개"
+      "name": "チヲハウハネ"
     },
     {
       "id": "SV4K-075",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/075",
       "localId": "075",
-      "name": "더스트나"
+      "name": "ダストダス"
     },
     {
       "id": "SV4K-076",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/076",
       "localId": "076",
-      "name": "모르페코"
+      "name": "モルペコ"
     },
     {
       "id": "SV4K-077",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/077",
       "localId": "077",
-      "name": "사나운버섯"
+      "name": "アラブルタケ"
     },
     {
       "id": "SV4K-078",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/078",
       "localId": "078",
-      "name": "노공룡"
+      "name": "ドゴーム"
     },
     {
       "id": "SV4K-079",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/079",
       "localId": "079",
-      "name": "카디나르마 ex"
+      "name": "グレンアルマex"
     },
     {
       "id": "SV4K-080",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/080",
       "localId": "080",
-      "name": "달코퀸 ex"
+      "name": "アマージョex"
     },
     {
       "id": "SV4K-081",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/081",
       "localId": "081",
-      "name": "갑주무사 ex"
+      "name": "グソクムシャex"
     },
     {
       "id": "SV4K-082",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/082",
       "localId": "082",
-      "name": "데스니칸 ex"
+      "name": "デスカーンex"
     },
     {
       "id": "SV4K-083",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/083",
       "localId": "083",
-      "name": "모래털가죽 ex"
+      "name": "スナノケガワex"
     },
     {
       "id": "SV4K-084",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/084",
       "localId": "084",
-      "name": "고동치는달 ex"
+      "name": "トドロクツキex"
     },
     {
       "id": "SV4K-085",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/085",
       "localId": "085",
-      "name": "멜로코"
+      "name": "オーリム博士の気迫"
     },
     {
       "id": "SV4K-086",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/086",
       "localId": "086",
-      "name": "올림박사의 기백"
+      "name": "センリ"
     },
     {
       "id": "SV4K-087",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/087",
       "localId": "087",
-      "name": "종길"
+      "name": "メロコ"
     },
     {
       "id": "SV4K-088",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/088",
       "localId": "088",
-      "name": "갑주무사 ex"
+      "name": "グソクムシャex"
     },
     {
       "id": "SV4K-089",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/089",
       "localId": "089",
-      "name": "모래털가죽 ex"
+      "name": "スナノケガワex"
     },
     {
       "id": "SV4K-090",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/090",
       "localId": "090",
-      "name": "고동치는달 ex"
+      "name": "トドロクツキex"
     },
     {
       "id": "SV4K-091",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/091",
       "localId": "091",
-      "name": "올림박사의 기백"
+      "name": "オーリム博士の気迫"
     },
     {
       "id": "SV4K-092",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/092",
       "localId": "092",
-      "name": "멜로코"
+      "name": "メロコ"
     },
     {
       "id": "SV4K-093",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/093",
       "localId": "093",
-      "name": "고동치는달 ex"
+      "name": "トドロクツキex"
     },
     {
       "id": "SV4K-094",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/094",
       "localId": "094",
-      "name": "럭셔리망토"
+      "name": "ゴージャスマント"
     },
     {
       "id": "SV4K-095",
+      "image": "https://assets.tcgdex.net/ja/SV/SV4K/095",
       "localId": "095",
-      "name": "기본 악 에너지"
+      "name": "基本悪エネルギー"
     }
   ],
   "id": "SV4K",
@@ -491,10 +586,10 @@
     "expanded": false,
     "standard": false
   },
-  "name": "고대의 포효",
+  "name": "古代の咆哮",
   "releaseDate": "2023-10-27",
   "serie": {
     "id": "SV",
-    "name": "스칼렛・바이올렛"
+    "name": "ポケモンカードゲーム スカーレット&バイオレット"
   }
 }

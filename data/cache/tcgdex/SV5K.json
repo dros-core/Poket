@@ -1,6 +1,6 @@
 {
-  "__lang": "ko",
-  "__fetchedAt": "2026-05-14T07:30:21.568Z",
+  "__lang": "ja",
+  "__fetchedAt": "2026-05-14T08:59:03.704Z",
   "cardCount": {
     "firstEd": 0,
     "holo": 0,
@@ -12,248 +12,297 @@
   "cards": [
     {
       "id": "SV5K-001",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/001",
       "localId": "001",
-      "name": "로젤리아"
+      "name": "ロゼリア"
     },
     {
       "id": "SV5K-002",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/002",
       "localId": "002",
-      "name": "로즈레이드"
+      "name": "ロズレイド"
     },
     {
       "id": "SV5K-003",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/003",
       "localId": "003",
-      "name": "모부기"
+      "name": "ナエトル"
     },
     {
       "id": "SV5K-004",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/004",
       "localId": "004",
-      "name": "수풀부기"
+      "name": "ハヤシガメ"
     },
     {
       "id": "SV5K-005",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/005",
       "localId": "005",
-      "name": "토대부기 ex"
+      "name": "ドダイトスex"
     },
     {
       "id": "SV5K-006",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/006",
       "localId": "006",
-      "name": "쉐이미"
+      "name": "シェイミ"
     },
     {
       "id": "SV5K-007",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/007",
       "localId": "007",
-      "name": "소미안"
+      "name": "モンメン"
     },
     {
       "id": "SV5K-008",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/008",
       "localId": "008",
-      "name": "엘풍"
+      "name": "エルフーン"
     },
     {
       "id": "SV5K-009",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/009",
       "localId": "009",
-      "name": "앤티골"
+      "name": "クイタラン"
     },
     {
       "id": "SV5K-010",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/010",
       "localId": "010",
-      "name": "태우지네"
+      "name": "ヤクデ"
     },
     {
       "id": "SV5K-011",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/011",
       "localId": "011",
-      "name": "다태우지네"
+      "name": "マルヤクデ"
     },
     {
       "id": "SV5K-012",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/012",
       "localId": "012",
-      "name": "꿰뚫는화염 ex"
+      "name": "ウガツホムラex"
     },
     {
       "id": "SV5K-013",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/013",
       "localId": "013",
-      "name": "리아코"
+      "name": "ワニノコ"
     },
     {
       "id": "SV5K-014",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/014",
       "localId": "014",
-      "name": "엘리게이"
+      "name": "アリゲイツ"
     },
     {
       "id": "SV5K-015",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/015",
       "localId": "015",
-      "name": "장크로다일"
+      "name": "オーダイル"
     },
     {
       "id": "SV5K-016",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/016",
       "localId": "016",
-      "name": "샤프니아"
+      "name": "キバニア"
     },
     {
       "id": "SV5K-017",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/017",
       "localId": "017",
-      "name": "샤크니아"
+      "name": "サメハダー"
     },
     {
       "id": "SV5K-018",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/018",
       "localId": "018",
-      "name": "케르디오"
+      "name": "ケルディオ"
     },
     {
       "id": "SV5K-019",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/019",
       "localId": "019",
-      "name": "누니머기"
+      "name": "ユキハミ"
     },
     {
       "id": "SV5K-020",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/020",
       "localId": "020",
-      "name": "모스노우"
+      "name": "モスノウ"
     },
     {
       "id": "SV5K-021",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/021",
       "localId": "021",
-      "name": "바다그다"
+      "name": "ウミディグダ"
     },
     {
       "id": "SV5K-063",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/063",
       "localId": "063",
-      "name": "주문박스"
+      "name": "なかよしポフィン"
     },
     {
       "id": "SV5K-074",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/074",
       "localId": "074",
-      "name": "동미러"
+      "name": "ドーミラー"
     },
     {
       "id": "SV5K-075",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/075",
       "localId": "075",
-      "name": "란쿨루스"
+      "name": "ランクルス"
     },
     {
       "id": "SV5K-076",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/076",
       "localId": "076",
-      "name": "날개치는머리"
+      "name": "ハバタクカミ"
     },
     {
       "id": "SV5K-077",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/077",
       "localId": "077",
-      "name": "시라칸"
+      "name": "ジーランス"
     },
     {
       "id": "SV5K-078",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/078",
       "localId": "078",
-      "name": "만마드"
+      "name": "バンバドロ"
     },
     {
       "id": "SV5K-079",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/079",
       "localId": "079",
-      "name": "아보크"
+      "name": "アーボック"
     },
     {
       "id": "SV5K-080",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/080",
       "localId": "080",
-      "name": "고오스"
+      "name": "ゴース"
     },
     {
       "id": "SV5K-081",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/081",
       "localId": "081",
-      "name": "페라페"
+      "name": "ペラップ"
     },
     {
       "id": "SV5K-082",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/082",
       "localId": "082",
-      "name": "치라미"
+      "name": "チラーミィ"
     },
     {
       "id": "SV5K-083",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/083",
       "localId": "083",
-      "name": "치라치노"
+      "name": "チラチーノ"
     },
     {
       "id": "SV5K-084",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/084",
       "localId": "084",
-      "name": "토대부기 ex"
+      "name": "ドダイトスex"
     },
     {
       "id": "SV5K-085",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/085",
       "localId": "085",
-      "name": "꿰뚫는화염 ex"
+      "name": "ウガツホムラex"
     },
     {
       "id": "SV5K-086",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/086",
       "localId": "086",
-      "name": "굽이치는물결 ex"
+      "name": "ウネルミナモex"
     },
     {
       "id": "SV5K-087",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/087",
       "localId": "087",
-      "name": "바닥트리오 ex"
+      "name": "ウミトリオex"
     },
     {
       "id": "SV5K-088",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/088",
       "localId": "088",
-      "name": "팬텀 ex"
+      "name": "ゲンガーex"
     },
     {
       "id": "SV5K-089",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/089",
       "localId": "089",
-      "name": "날뛰는우레 ex"
+      "name": "タケルライコex"
     },
     {
       "id": "SV5K-090",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/090",
       "localId": "090",
-      "name": "탐험가의 선도"
+      "name": "探検家の先導"
     },
     {
       "id": "SV5K-091",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/091",
       "localId": "091",
-      "name": "비파"
+      "name": "ビワ"
     },
     {
       "id": "SV5K-092",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/092",
       "localId": "092",
-      "name": "유빈의 확신"
+      "name": "マツバの確信"
     },
     {
       "id": "SV5K-093",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/093",
       "localId": "093",
-      "name": "꿰뚫는화염 ex"
+      "name": "ウガツホムラex"
     },
     {
       "id": "SV5K-094",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/094",
       "localId": "094",
-      "name": "굽이치는물결 ex"
+      "name": "ウネルミナモex"
     },
     {
       "id": "SV5K-095",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/095",
       "localId": "095",
-      "name": "날뛰는우레 ex"
+      "name": "タケルライコex"
     },
     {
       "id": "SV5K-096",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/096",
       "localId": "096",
-      "name": "비파"
+      "name": "ビワ"
     },
     {
       "id": "SV5K-097",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/097",
       "localId": "097",
-      "name": "유빈의 확신"
+      "name": "マツバの確信"
     },
     {
       "id": "SV5K-098",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/098",
       "localId": "098",
-      "name": "꿰뚫는화염 ex"
+      "name": "ウガツホムラex"
     },
     {
       "id": "SV5K-099",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/099",
       "localId": "099",
-      "name": "굽이치는물결 ex"
+      "name": "ウネルミナモex"
     },
     {
       "id": "SV5K-100",
+      "image": "https://assets.tcgdex.net/ja/SV/SV5K/100",
       "localId": "100",
-      "name": "날뛰는우레 ex"
+      "name": "タケルライコex"
     }
   ],
   "id": "SV5K",
@@ -261,10 +310,10 @@
     "expanded": false,
     "standard": false
   },
-  "name": "와일드포스",
+  "name": "ワイルドフォース",
   "releaseDate": "2024-01-26",
   "serie": {
     "id": "SV",
-    "name": "스칼렛・바이올렛"
+    "name": "ポケモンカードゲーム スカーレット&バイオレット"
   }
 }

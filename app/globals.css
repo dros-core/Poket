@@ -2,34 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === Pretendard 폰트 === */
+/* === 폰트 === */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Jua&family=Press+Start+2P&display=swap");
 
 /* === 디자인 토큰 === */
 :root {
-  /* 라이트 모드 (Anthropic 영감의 따뜻한 중성톤) */
-  --bg: #fbf9f7;
+  /* 라이트 모드 (따뜻한 베이스) */
+  --bg: #fdfaf5;
   --bg-elev: #ffffff;
-  --bg-mute: #f4f0eb;
+  --bg-mute: #f6efe2;
   --bg-card: #ffffff;
-  --fg: #15110e;
-  --fg-soft: #3a322a;
-  --fg-muted: #6b5d49;
-  --fg-faint: #8a7a62;
-  --border: #e7e0d5;
-  --border-strong: #d4c9b8;
-  --accent: #f95012;
-  --accent-bg: rgba(249, 80, 18, 0.08);
+  --fg: #1a1814;
+  --fg-soft: #3d3a33;
+  --fg-muted: #6b665c;
+  --fg-faint: #9a958a;
+  --border: #ebe3d3;
+  --border-strong: #d4c9b0;
 
-  /* 한국 시세 컨벤션 색상 */
-  --up: #ef4444;        /* 상승 */
-  --down: #3b82f6;      /* 하락 */
-  --up-bg: rgba(239, 68, 68, 0.10);
-  --down-bg: rgba(59, 130, 246, 0.10);
+  /* 포켓몬 코어 */
+  --pkm-red: #EE1515;
+  --pkm-red-dark: #B7090E;
+  --pkm-yellow: #FFCB05;
+  --pkm-yellow-dark: #E6B400;
+  --pkm-blue: #3D7DCA;
+  --pkm-blue-dark: #2A5A9E;
+  --pkm-navy: #003A70;
+  --pkm-ink: #222224;
 
-  /* 모션 토큰 */
+  /* 시세 컨벤션 (포켓몬 톤) */
+  --up: #EE1515;
+  --down: #3D7DCA;
+  --up-bg: rgba(238, 21, 21, 0.10);
+  --down-bg: rgba(61, 125, 202, 0.10);
+  --accent: #EE1515;
+  --accent-bg: rgba(238, 21, 21, 0.08);
+
+  /* 모션 */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 150ms;
   --dur: 250ms;
@@ -38,37 +48,32 @@
 
 [data-theme="dark"] {
   --bg: #0c0a09;
-  --bg-elev: #15110e;
-  --bg-mute: #1c1714;
-  --bg-card: #181411;
+  --bg-elev: #1a1612;
+  --bg-mute: #221d18;
+  --bg-card: #1d1814;
   --fg: #fbf9f7;
   --fg-soft: #e7e0d5;
-  --fg-muted: #b3a48b;
-  --fg-faint: #8a7a62;
+  --fg-muted: #a89e8c;
+  --fg-faint: #6b665c;
   --border: #2a221c;
   --border-strong: #3a322a;
-  --accent: #fb7138;
-  --accent-bg: rgba(251, 113, 56, 0.14);
-  --up: #f87171;
-  --down: #60a5fa;
-  --up-bg: rgba(248, 113, 113, 0.12);
-  --down-bg: rgba(96, 165, 250, 0.12);
+  --up: #FF5757;
+  --down: #6BA0E0;
+  --up-bg: rgba(255, 87, 87, 0.14);
+  --down-bg: rgba(107, 160, 224, 0.14);
+  --accent: #FFCB05;
+  --accent-bg: rgba(255, 203, 5, 0.14);
 }
 
-/* === 기본 스타일 === */
-html {
-  font-feature-settings: "ss01", "cv11", "tnum";
-}
-html,
-body {
+/* === 기본 === */
+html { font-feature-settings: "ss01", "cv11", "tnum"; scroll-behavior: smooth; }
+html, body {
   background: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* prefers-reduced-motion 대응 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -78,26 +83,12 @@ body {
   }
 }
 
-::selection {
-  background: var(--accent);
-  color: white;
-}
-
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
+::selection { background: var(--pkm-red); color: white; }
+:focus-visible { outline: 2px solid var(--pkm-red); outline-offset: 2px; border-radius: 8px; }
 
 /* === 컴포넌트 클래스 === */
-.surface {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-}
-.surface-mute {
-  background: var(--bg-mute);
-  border: 1px solid var(--border);
-}
+.surface { background: var(--bg-elev); border: 1px solid var(--border); }
+.surface-mute { background: var(--bg-mute); border: 1px solid var(--border); }
 
 .card {
   background: var(--bg-card);
@@ -111,41 +102,57 @@ body {
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06), 0 16px 36px rgba(15, 23, 42, 0.10);
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06), 0 16px 36px rgba(238, 21, 21, 0.08);
   border-color: var(--border-strong);
 }
 
-/* 시세 변동 색상 (한국 컨벤션) */
 .text-up { color: var(--up); }
 .text-down { color: var(--down); }
 .bg-up { background: var(--up-bg); color: var(--up); }
 .bg-down { background: var(--down-bg); color: var(--down); }
 
-/* 텍스트 그라데이션 */
+/* === 포켓몬 시그니처 그라데이션 === */
+.text-gradient-pkm {
+  background: linear-gradient(110deg, #EE1515 0%, #FF6B6B 25%, #FFCB05 60%, #FFA500 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient 8s ease infinite;
+}
 .text-gradient-brand {
-  background: linear-gradient(135deg, #fb7138 0%, #f95012 50%, #c12509 100%);
+  background: linear-gradient(135deg, #EE1515 0%, #B7090E 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Shimmer (스켈레톤) */
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--bg-mute) 0%,
-    var(--bg-elev) 50%,
-    var(--bg-mute) 100%
+/* === 배경 패턴 === */
+.bg-radial-pkm {
+  background: radial-gradient(
+    ellipse 85% 65% at 20% 0%,
+    rgba(255, 203, 5, 0.22) 0%,
+    rgba(238, 21, 21, 0.12) 35%,
+    transparent 70%
   );
-  background-size: 800px 100%;
-  animation: shimmer 1.6s linear infinite;
 }
-@keyframes shimmer {
-  0% { background-position: -800px 0; }
-  100% { background-position: 800px 0; }
+.bg-radial-yellow {
+  background: radial-gradient(
+    ellipse 60% 50% at 80% 100%,
+    rgba(255, 203, 5, 0.18) 0%,
+    rgba(255, 203, 5, 0.06) 40%,
+    transparent 70%
+  );
 }
 
-/* 백드롭 그리드 패턴 */
+.bg-pokeball-tile {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><circle cx='40' cy='40' r='14' fill='none' stroke='%23EE1515' stroke-width='2' opacity='0.18'/><line x1='26' y1='40' x2='54' y2='40' stroke='%23EE1515' stroke-width='2' opacity='0.18'/><circle cx='40' cy='40' r='4' fill='none' stroke='%23EE1515' stroke-width='2' opacity='0.18'/></svg>");
+  background-size: 80px 80px;
+}
+[data-theme="dark"] .bg-pokeball-tile {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><circle cx='40' cy='40' r='14' fill='none' stroke='%23FFCB05' stroke-width='2' opacity='0.10'/><line x1='26' y1='40' x2='54' y2='40' stroke='%23FFCB05' stroke-width='2' opacity='0.10'/><circle cx='40' cy='40' r='4' fill='none' stroke='%23FFCB05' stroke-width='2' opacity='0.10'/></svg>");
+}
+
 .bg-grid {
   background-image:
     linear-gradient(to right, var(--border) 1px, transparent 1px),
@@ -154,53 +161,103 @@ body {
   background-position: -1px -1px;
 }
 
-/* 방사형 그라데이션 (Hero 배경용) */
-.bg-radial-brand {
-  background: radial-gradient(
-    ellipse 80% 60% at 50% 0%,
-    rgba(249, 80, 18, 0.18) 0%,
-    rgba(251, 113, 56, 0.10) 40%,
-    transparent 70%
-  );
+/* === Shimmer === */
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-mute) 0%, var(--bg-elev) 50%, var(--bg-mute) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: -800px 0; }
+  100% { background-position: 800px 0; }
 }
 
-/* 노이즈 텍스처 (선택) */
-.noise::before {
+/* === 카드 홀로그래픽 효과 (TCG 카드 모티프) === */
+@property --holo-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.holo {
+  position: relative;
+  isolation: isolate;
+}
+.holo::before {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
+  background:
+    conic-gradient(
+      from var(--holo-angle, 0deg) at 50% 50%,
+      #ff00808a, #ff8c00a0, #ffd700a0, #00ff88a0,
+      #00d9ffa0, #7b00ffa0, #ff00808a
+    );
+  mix-blend-mode: color-dodge;
+  opacity: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.6;
+  transition: opacity 300ms ease-out;
+  z-index: 1;
+}
+.holo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 45%
+  );
   mix-blend-mode: overlay;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease-out;
+  z-index: 2;
+}
+.holo:hover::before {
+  opacity: 0.45;
+  animation: holoSpin 4s linear infinite;
+}
+.holo:hover::after {
+  opacity: 1;
+}
+@keyframes holoSpin {
+  to {
+    --holo-angle: 360deg;
+  }
 }
 
-/* Recharts dark mode 보정 */
-[data-theme="dark"] .recharts-text {
-  fill: #b3a48b;
+/* === TCG 프리미엄 카드 프레임 (Hot pick 표시) === */
+.frame-tcg {
+  background:
+    linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+    linear-gradient(135deg, #FFCB05 0%, #FFE680 40%, #FFCB05 60%, #B98D00 100%) border-box;
+  border: 3px solid transparent;
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(34, 34, 36, 0.4) inset,
+    0 8px 24px rgba(238, 21, 21, 0.18);
 }
-[data-theme="dark"] .recharts-cartesian-grid line {
-  stroke: #2a221c;
-}
+
+/* === Recharts 다크모드 보정 === */
+[data-theme="dark"] .recharts-text { fill: #a89e8c; }
+[data-theme="dark"] .recharts-cartesian-grid line { stroke: #2a221c; }
 [data-theme="dark"] .recharts-tooltip-wrapper .recharts-default-tooltip {
-  background: #15110e !important;
+  background: #1a1612 !important;
   border: 1px solid #3a322a !important;
 }
 
-/* 부드러운 스크롤 */
-html { scroll-behavior: smooth; }
-
-/* 모바일 안전 여백 */
+/* === 유틸 === */
 @supports (padding: env(safe-area-inset-bottom)) {
   .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
   .pt-safe { padding-top: env(safe-area-inset-top); }
 }
 
-/* 모바일 가로 스크롤 영역 — 우아한 가장자리 페이드 */
 .scroll-fade-x {
   mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
 }
 
-/* 숫자 표 정렬 */
 .tnum { font-variant-numeric: tabular-nums; }
+.font-pixel { letter-spacing: 0.03em; }

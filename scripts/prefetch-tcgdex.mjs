@@ -21,7 +21,9 @@ const ROOT = path.resolve(__dirname, "..");
 const CACHE_DIR = path.join(ROOT, "data", "cache", "tcgdex");
 const FORCE = process.env.FORCE === "1";
 const BASE = "https://api.tcgdex.net/v2";
-const LANG_FALLBACK = ["ko", "ja", "en"];
+// 우선순위: 일본어가 image 메타 가장 풍부. 한국어는 카드 목록 비어있는 경우 많음.
+// 영어는 카드 ID가 다른 경우 있어 매칭 불일치 위험 — 최후 폴백
+const LANG_FALLBACK = ["ja", "ko", "en"];
 
 // 우리가 추적하는 한국 정발 세트 후보 (TCGdex set ID 기준)
 // 한국어 데이터가 없는 신규 세트는 ja 폴백
@@ -87,22 +89,32 @@ async function writeJson(p, data) {
 }
 
 async function fetchSetWithFallback(setId) {
+  // 모든 라우트를 시도하고, image 필드가 채워진 카드가 가장 많은 라우트를 선택
+  const candidates = [];
   for (const lang of LANG_FALLBACK) {
     const data = await fetchJson(`${BASE}/${lang}/sets/${setId}`);
-    if (data && Array.isArray(data.cards) && data.cards.length > 0) {
-      return { lang, data };
-    }
-    if (data && !Array.isArray(data.cards)) {
-      // sometimes meta-only response
-      continue;
-    }
+    if (!data) continue;
+    const cards = Array.isArray(data.cards) ? data.cards : [];
+    const withImage = cards.filter((c) => c.image).length;
+    candidates.push({ lang, data, cards: cards.length, withImage });
   }
-  // 마지막으로 meta-only 라도 한국어부터
-  for (const lang of LANG_FALLBACK) {
-    const data = await fetchJson(`${BASE}/${lang}/sets/${setId}`);
-    if (data) return { lang, data };
-  }
-  return null;
+  if (candidates.length === 0) return null;
+
+  // 우선순위:
+  // 1) image가 있는 라우트 중 LANG_FALLBACK 순서 (ja > ko > en)
+  // 2) image 0개여도 cards 있는 라우트 (ja > ko > en)
+  // 3) meta만 있는 경우 ja > ko > en
+  candidates.sort((a, b) => {
+    const aHas = a.withImage > 0 ? 1 : 0;
+    const bHas = b.withImage > 0 ? 1 : 0;
+    if (aHas !== bHas) return bHas - aHas;
+    const aHasCards = a.cards > 0 ? 1 : 0;
+    const bHasCards = b.cards > 0 ? 1 : 0;
+    if (aHasCards !== bHasCards) return bHasCards - aHasCards;
+    return LANG_FALLBACK.indexOf(a.lang) - LANG_FALLBACK.indexOf(b.lang);
+  });
+
+  return { lang: candidates[0].lang, data: candidates[0].data };
 }
 
 async function main() {

@@ -29,7 +29,13 @@ export function SetCard({ set, latestPrice, prevPrice, sparkData, image }: Props
     <motion.div whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 400, damping: 28 }}>
       <Link
         href={`/cards/${set.id}`}
-        className="card card-hover relative flex flex-col gap-3 h-full overflow-hidden group"
+        onMouseMove={(e) => {
+          const target = e.currentTarget;
+          const r = target.getBoundingClientRect();
+          target.style.setProperty("--mx", `${e.clientX - r.left}px`);
+          target.style.setProperty("--my", `${e.clientY - r.top}px`);
+        }}
+        className="card card-hover holo relative flex flex-col gap-3 h-full overflow-hidden group"
       >
         {/* 상단: 코드 칩 + 상태 */}
         <div className="flex items-center justify-between gap-2">
