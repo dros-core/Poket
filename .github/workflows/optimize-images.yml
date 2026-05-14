@@ -1,0 +1,57 @@
+name: Optimize box-photo images
+
+on:
+  pull_request:
+    paths:
+      - 'public/box-photos/**.jpg'
+      - 'public/box-photos/**.jpeg'
+      - 'public/box-photos/**.png'
+      - 'public/box-photos/**.webp'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  optimize:
+    name: Compress box photos
+    runs-on: ubuntu-latest
+    # Forks 에서 실행 시 쓰기 권한 없으므로 skip (보안)
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Compress images (calibreapp/image-actions)
+        id: optimize
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          # JPEG: 80 / PNG: 90 / WebP: 80 — 박스 사진은 디테일 보존 우선
+          jpegQuality: '85'
+          pngQuality: '90'
+          webpQuality: '85'
+          ignorePaths: 'node_modules/**,**/*.gif,**/*.svg'
+
+      - name: Sync setImageMap + blurDataURL
+        if: steps.optimize.outputs.markdown != ''
+        run: |
+          if [ -f package.json ]; then
+            npm install --no-audit --no-fund
+            npm run box:sync:write || echo "box:sync:write skipped"
+          fi
+
+      - name: Comment with savings
+        if: steps.optimize.outputs.markdown != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `### 🖼️ 박스 사진 자동 압축 결과\n\n${{ steps.optimize.outputs.markdown }}\n\n> setImageMap.ts 와 boxBlurPlaceholders.ts 도 자동 갱신되었습니다.`
+            })
