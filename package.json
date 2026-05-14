@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit",
     "data:prefetch": "node scripts/prefetch-tcgdex.mjs",
     "data:prefetch:force": "FORCE=1 node scripts/prefetch-tcgdex.mjs",
-    "data:verify": "node scripts/verify-data.mjs"
+    "data:verify": "node scripts/verify-data.mjs",
+    "box:sync": "node scripts/sync-box-photos.mjs",
+    "box:sync:write": "node scripts/sync-box-photos.mjs --write"
   },
   "dependencies": {
     "clsx": "^2.1.1",
