@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import clsx from "clsx";
-import { ArrowUpRight, ArrowDownRight, Minus, ChevronRight } from "lucide-react";
-import { CardImage } from "@/components/cards/CardImage";
+import { ArrowUpRight, ArrowDownRight, Minus, ChevronRight, Package } from "lucide-react";
+import { BoxMockup } from "@/components/cards/BoxMockup";
 import { Sparkline } from "@/components/cards/Sparkline";
 import type { CardSet } from "@/lib/types";
 import type { ResolvedImage } from "@/lib/data/imageResolver";
@@ -16,9 +16,11 @@ interface Props {
   prevPrice: number;
   sparkData?: number[];
   image: ResolvedImage;
+  logoUrl?: string;
+  boxPhotoUrl?: string;
 }
 
-export function SetCard({ set, latestPrice, prevPrice, sparkData, image }: Props) {
+export function SetCard({ set, latestPrice, prevPrice, sparkData, image, logoUrl, boxPhotoUrl }: Props) {
   const change = prevPrice ? ((latestPrice - prevPrice) / prevPrice) * 100 : 0;
   const changeAbs = latestPrice - prevPrice;
   const isUp = change > 0.5;
@@ -26,18 +28,12 @@ export function SetCard({ set, latestPrice, prevPrice, sparkData, image }: Props
   const vsMsrp = ((latestPrice - set.msrpKRW) / set.msrpKRW) * 100;
 
   return (
-    <motion.div whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+    <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
       <Link
         href={`/cards/${set.id}`}
-        onMouseMove={(e) => {
-          const target = e.currentTarget;
-          const r = target.getBoundingClientRect();
-          target.style.setProperty("--mx", `${e.clientX - r.left}px`);
-          target.style.setProperty("--my", `${e.clientY - r.top}px`);
-        }}
-        className="card card-hover holo relative flex flex-col gap-4 h-full overflow-hidden group"
+        className="card card-hover relative flex flex-col gap-4 h-full overflow-hidden group"
       >
-        {/* 상단: 코드 · 상태 · 화살표 */}
+        {/* 상단 메타 */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
             <span className="font-pixel text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded bg-[var(--bg-mute)] text-[var(--fg-faint)] border border-[var(--border)]">
@@ -61,36 +57,47 @@ export function SetCard({ set, latestPrice, prevPrice, sparkData, image }: Props
           />
         </div>
 
-        {/* 메인: 이미지 + 정보 */}
-        <div className="flex gap-4 relative">
-          <div className="relative shrink-0 overflow-hidden rounded-xl ring-1 ring-white/5">
-            <div className="transition-transform duration-700 ease-luxe group-hover:scale-[1.04]">
-              <CardImage image={image} variant="card" width={92} height={128} />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+        {/* 박스 패키지 mockup */}
+        <div className="flex gap-4 items-start">
+          <div className="shrink-0">
+            <BoxMockup
+              set={set}
+              cardImage={image}
+              logoUrl={logoUrl}
+              boxPhotoUrl={boxPhotoUrl}
+              width={108}
+              height={144}
+              interactive
+            />
           </div>
-          <div className="min-w-0 flex-1 flex flex-col">
+          <div className="min-w-0 flex-1 flex flex-col h-[144px]">
             <div className="text-[10px] font-pixel tracking-widest text-[var(--fg-faint)] uppercase truncate">
               {set.series}
             </div>
-            <h3 className="font-display text-lg leading-tight line-clamp-2 mt-1 text-[var(--fg)] tracking-tight">
+            <h3 className="font-display text-base sm:text-lg leading-tight line-clamp-2 mt-1 text-[var(--fg)] tracking-tight">
               {set.nameKo}
             </h3>
-            <div className="mt-auto text-[11px] text-[var(--fg-muted)] flex flex-wrap gap-x-3 gap-y-0.5">
+            <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-mono text-[var(--accent)] uppercase tracking-wider">
+              <Package size={10} strokeWidth={2.4} />
+              1 Booster Box
+            </div>
+            <div className="mt-auto text-[11px] text-[var(--fg-muted)] flex flex-wrap gap-x-2 gap-y-0.5">
               <span className="font-mono tnum">{formatDate(set.releaseDate)}</span>
               <span className="text-[var(--fg-faint)]">·</span>
               <span>{set.packsPerBox}팩</span>
+              <span className="text-[var(--fg-faint)]">·</span>
+              <span>정가 {formatPrice(set.msrpKRW)}</span>
             </div>
           </div>
         </div>
 
-        {/* 하단: 가격 + 스파크라인 */}
+        {/* 박스 시세 (가장 prominently) */}
         <div className="pt-4 border-t border-[var(--border)] flex items-end justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-[10px] font-pixel tracking-widest text-[var(--fg-faint)] uppercase">
+            <div className="text-[10px] font-pixel tracking-widest text-[var(--accent)] uppercase">
               Box Price
             </div>
-            <div className="font-mono text-xl font-medium tnum leading-none mt-1.5 text-[var(--fg)]">
+            <div className="font-mono text-xl sm:text-2xl font-medium tnum leading-none mt-1.5 text-[var(--fg)]">
               {formatPrice(latestPrice)}
             </div>
             <div

@@ -8,7 +8,9 @@ const nextConfig = {
       { protocol: "https", hostname: "assets.tcgdex.net" },
       { protocol: "https", hostname: "raw.githubusercontent.com" },
       { protocol: "https", hostname: "assets.pokemon.com" },
-      { protocol: "https", hostname: "img.pokemoncard.io" }
+      { protocol: "https", hostname: "img.pokemoncard.io" },
+      { protocol: "https", hostname: "product-images.tcgplayer.com" },
+      { protocol: "https", hostname: "tcgplayer-cdn.tcgplayer.com" }
     ]
   }
 };

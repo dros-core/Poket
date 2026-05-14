@@ -215,7 +215,7 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
                 <span className="relative rounded-full bg-up w-1.5 h-1.5" />
               </span>
               <span className="font-pixel text-[9px] tracking-widest text-[var(--fg-muted)] uppercase">
-                Live · 29 Sets · KR Market
+                Booster Box Market · 29 Sets · KR
               </span>
             </div>
           </motion.div>
@@ -228,9 +228,10 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
             transition={{ delay: 0.08 }}
             className="mt-6 font-display text-[2.75rem] leading-[1] sm:text-6xl lg:text-7xl tracking-tight text-[var(--fg)]"
           >
-            한국 포켓몬 카드,
+            포켓몬 카드
             <br />
-            <span className="text-luxe italic font-medium">시세의 표준</span>
+            <span className="text-luxe italic font-medium">박스 시세,</span>{" "}
+            <span className="text-[var(--fg)]">한곳에서.</span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -241,8 +242,9 @@ export function Hero({ featuredImages = [], ticker = [] }: Props) {
             transition={{ delay: 0.15 }}
             className="mt-6 text-base sm:text-lg text-[var(--fg-muted)] leading-relaxed max-w-lg"
           >
-            KREAM · 너정다 · TCGBOX · 번개장터 · Mercari를 하나의 데이터 레이어로.
-            <span className="text-[var(--fg-soft)]"> 박스 EV, 90일 예측, 채널간 차익 기회</span>까지 — 매수·매도 의사결정의 전 영역.
+            한국 정식 발매 <span className="text-[var(--fg-soft)] font-medium">부스터박스 29종</span>의 시세를
+            KREAM · 너정다 · TCGBOX · 번개장터 · Mercari에서 통합 추적.{" "}
+            <span className="text-[var(--fg-soft)]">90일 예측 · 채널간 차익 · 도소매 구매처</span>까지 — 박스 매수·매도의 전 영역.
           </motion.p>
 
           {/* 모바일 메인 카드 + 피카츄 */}

@@ -11,12 +11,12 @@ import { PokeballLogo } from "@/components/brand/PokeballLogo";
 
 const navLinks = [
   { href: "/", label: "Overview", labelKo: "대시보드", icon: LayoutDashboard },
-  { href: "/cards", label: "Sets", labelKo: "카드/박스", icon: Sparkles },
+  { href: "/cards", label: "Box Market", labelKo: "박스 시세", icon: Package },
   { href: "/trends", label: "Trends", labelKo: "시세 추이", icon: TrendingUp },
   { href: "/predictions", label: "Forecast", labelKo: "예측", icon: LineChart },
   { href: "/arbitrage", label: "Arbitrage", labelKo: "차익", icon: Coins },
   { href: "/wholesale", label: "Wholesale", labelKo: "도매", icon: Building2 },
-  { href: "/retail", label: "Retail", labelKo: "소매", icon: Package },
+  { href: "/retail", label: "Retail", labelKo: "소매", icon: Sparkles },
   { href: "/guide", label: "Guides", labelKo: "가이드", icon: BookOpen }
 ];
 

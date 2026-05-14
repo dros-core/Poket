@@ -85,6 +85,31 @@ function resolveFromPokemontcg(
 }
 
 /**
+ * 세트 로고 URL (박스 패키지 상단 로고 텍스트).
+ * pokemontcg.io의 set.images.logo 활용.
+ */
+export function resolveSetLogo(set: CardSet): string | undefined {
+  const mapping = getMapping(set.id);
+  if (!mapping?.pokemontcgIoId) return undefined;
+  return `https://images.pokemontcg.io/${mapping.pokemontcgIoId}/logo.png`;
+}
+
+export function resolveSetSymbol(set: CardSet): string | undefined {
+  const mapping = getMapping(set.id);
+  if (!mapping?.pokemontcgIoId) return undefined;
+  return `https://images.pokemontcg.io/${mapping.pokemontcgIoId}/symbol.png`;
+}
+
+/**
+ * 실 박스 패키지 사진 URL (자체 호스팅 또는 외부 라이선스 클리어).
+ * setImageMap.boxPhotoUrl에 매핑된 URL을 그대로 반환.
+ */
+export function resolveBoxPhoto(set: CardSet): string | undefined {
+  const mapping = getMapping(set.id);
+  return mapping?.boxPhotoUrl;
+}
+
+/**
  * 세트의 hero(박스 패키지 대표) 이미지 해소.
  * TCGdex hero → pokemontcg.io hero → placeholder
  */

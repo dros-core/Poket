@@ -7,7 +7,7 @@ import { Reveal, StaggerGroup, StaggerItem } from "@/components/ui/motion";
 import { ArbitrageTable } from "@/components/tables/ArbitrageTable";
 import { FeaturedCardShowcase } from "@/components/cards/FeaturedCardShowcase";
 import { repository } from "@/lib/data/repository";
-import { resolveSetImage } from "@/lib/data/imageResolver";
+import { resolveSetImage, resolveSetLogo, resolveBoxPhoto } from "@/lib/data/imageResolver";
 import { formatPct, formatPrice } from "@/lib/format";
 
 export default function HomePage() {
@@ -43,6 +43,7 @@ export default function HomePage() {
     return {
       set: s,
       image: resolveSetImage(s),
+      logoUrl: resolveSetLogo(s),
       latestPrice: latest,
       changePct: prev ? ((latest - prev) / prev) * 100 : 0
     };
@@ -149,9 +150,11 @@ export default function HomePage() {
             const prev = history[Math.max(0, history.length - 5)]?.avg ?? latest;
             const sparkData = history.map((h) => h.avg);
             const image = resolveSetImage(s);
+            const logoUrl = resolveSetLogo(s);
+            const boxPhotoUrl = resolveBoxPhoto(s);
             return (
               <StaggerItem key={s.id}>
-                <SetCard set={s} latestPrice={latest} prevPrice={prev} sparkData={sparkData} image={image} />
+                <SetCard set={s} latestPrice={latest} prevPrice={prev} sparkData={sparkData} image={image} logoUrl={logoUrl} boxPhotoUrl={boxPhotoUrl} />
               </StaggerItem>
             );
           })}
