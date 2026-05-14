@@ -9,6 +9,7 @@ import {
 import { forecastPrice } from "@/lib/prediction/forecast";
 import { calculateBoxEV, type EVResult } from "@/lib/prediction/expectedValue";
 import { detectArbitrageFromObservations } from "@/lib/prediction/arbitrage";
+import { isLiveDataEnabled, fetchKreamBoxPrice } from "@/lib/scrapers";
 import type {
   Card,
   CardSet,
@@ -20,8 +21,13 @@ import type {
 
 /**
  * 도메인 데이터 접근 레이어
- * - 현재는 seed 데이터에서 조회
- * - lib/scrapers의 어댑터를 활성화하면 동일 인터페이스로 실시세 데이터 반환
+ * - 기본: seed 데이터에서 조회 (동기)
+ * - `POKET_USE_LIVE=true` + 비동기 메서드 사용 시 live 어댑터 결과를 prepend
+ *
+ * 마이그레이션 가이드:
+ *   기존 페이지는 동기 `repository.getBoxObservations(setId)` 유지
+ *   실시세가 필요한 페이지는 `repository.getBoxObservationsLive(setId)` 사용
+ *   live 결과는 seed 보다 먼저 (최신성 우선) 정렬되어 반환
  */
 
 export const repository = {
@@ -56,6 +62,25 @@ export const repository = {
   getBoxObservations(setId: string): PriceObservation[] {
     return buildBoxObservations(setId);
   },
+
+  /**
+   * Live (KREAM) + seed 박스 시세를 통합 반환.
+   * - POKET_USE_LIVE=true 일 때만 live fetch 시도
+   * - KREAM 미매핑/에러 시 seed 만 반환 (graceful degradation)
+   * - live 결과는 배열 앞쪽 (최신성 우선)
+   */
+  async getBoxObservationsLive(setId: string): Promise<PriceObservation[]> {
+    const seed = buildBoxObservations(setId);
+    if (!isLiveDataEnabled()) return seed;
+    try {
+      const live = await fetchKreamBoxPrice(setId);
+      return [...live.observations, ...seed];
+    } catch (err) {
+      console.warn(`[repository] live fetch 실패 (${setId}):`, err instanceof Error ? err.message : err);
+      return seed;
+    }
+  },
+
   getAllLatestBoxObservations(): PriceObservation[] {
     return cardSets.flatMap((s) => buildBoxObservations(s.id));
   },
