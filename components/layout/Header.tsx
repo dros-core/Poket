@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, TrendingUp, LineChart, Coins, Building2, Package, BookOpen, LayoutDashboard, Sparkles } from "lucide-react";
+import { Menu, X, TrendingUp, LineChart, Coins, Building2, Package, BookOpen, LayoutDashboard, Sparkles, Wallet } from "lucide-react";
 import clsx from "clsx";
 import { ThemeToggle } from "./ThemeToggle";
 import { PokeballLogo } from "@/components/brand/PokeballLogo";
@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/trends", label: "Trends", labelKo: "시세 추이", icon: TrendingUp },
   { href: "/predictions", label: "Forecast", labelKo: "예측", icon: LineChart },
   { href: "/arbitrage", label: "Arbitrage", labelKo: "차익", icon: Coins },
+  { href: "/portfolio", label: "Portfolio", labelKo: "포트폴리오", icon: Wallet },
   { href: "/wholesale", label: "Wholesale", labelKo: "도매", icon: Building2 },
   { href: "/retail", label: "Retail", labelKo: "소매", icon: Sparkles },
   { href: "/guide", label: "Guides", labelKo: "가이드", icon: BookOpen }
