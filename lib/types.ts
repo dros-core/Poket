@@ -51,24 +51,58 @@ export type Marketplace =
 
 export type ChannelType = "WHOLESALE" | "RETAIL_ONLINE" | "RETAIL_OFFLINE" | "P2P" | "OVERSEAS";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 박스 분류 (3축)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * 한국 발매 연도. 시간축 그룹화 (절판/현역 시그널 + 코호트 비교).
+ */
+export type SetEra = "2023" | "2024" | "2025" | "2026";
+
+/**
+ * 시리즈 그룹. 박스 구성/정가/봉입률 카테고리.
+ * - SV_REGULAR: SV 본팩 (30팩, 117K)
+ * - SV_ENHANCED: SV 강화확장팩 (20팩, 88K, 예: 151, 트리플렛비트)
+ * - SV_HIGH_CLASS: SV 하이클래스 (10팩, 88K, 예: 샤이니트레저/테라스탈페스타/화블)
+ * - MEGA: 메가 진화 시리즈 (30팩, 117K)
+ */
+export type SeriesGroup =
+  | "SV_REGULAR"
+  | "SV_ENHANCED"
+  | "SV_HIGH_CLASS"
+  | "MEGA";
+
+/**
+ * 시장 상태. 거래 전략에 직결.
+ * - PRE_RELEASE: 발매 전 (예약)
+ * - ACTIVE: 현역 판매 중 (소매점/공식 유통 정상)
+ * - DISCONTINUED: 절판 (공식 유통 종료, P2P 위주)
+ */
+export type MarketStatus = "PRE_RELEASE" | "ACTIVE" | "DISCONTINUED";
+
 export interface CardSet {
   id: string;
   code: string; // e.g. "sv1K"
   nameKo: string; // e.g. "스칼렛 ex"
   nameEn: string;
   nameJa?: string;
-  series: string; // e.g. "스칼렛&바이올렛"
-  releaseDate: string; // ISO 8601
+  series: string; // e.g. "스칼렛&바이올렛" (사용자 표시용 한국어)
+  releaseDate: string; // ISO 8601 (한국판 발매일)
   totalCards: number;
   packsPerBox: number;
   cardsPerPack: number;
   msrpKRW: number; // 정가 (박스 기준)
   imageUrl?: string; // 박스/로고 대표 이미지
   imageSource?: ImageSource;
-  tcgdexId?: string; // TCGdex 세트 ID (예: "sv02")
-  pokemontcgIoId?: string; // pokemontcg.io 세트 ID (예: "sv3pt5")
+  tcgdexId?: string; // TCGdex 세트 ID
+  pokemontcgIoId?: string; // pokemontcg.io 세트 ID
   references?: SourceReference[]; // KREAM/너정다/TCGBOX 시세 페이지
-  isActive: boolean; // 절판 여부
+  isActive: boolean; // (legacy) 단순 절판 여부 — marketStatus 도입 후에도 호환용 유지
+  // 3축 분류 (optional — 마이그레이션 중 안전)
+  era?: SetEra;
+  seriesGroup?: SeriesGroup;
+  marketStatus?: MarketStatus;
 }
 
 export interface Card {
