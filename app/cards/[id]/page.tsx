@@ -1,32 +1,43 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, ShieldCheck, TrendingUp } from "lucide-react";
 import { Stat } from "@/components/ui/Stat";
 import { Badge } from "@/components/ui/Badge";
 import { CardImage } from "@/components/cards/CardImage";
 import { PriceTrendChart } from "@/components/charts/PriceTrendChart";
 import { repository } from "@/lib/data/repository";
+import { confidenceLabel } from "@/lib/data/priceAggregator";
 import { formatDate, formatPct, formatPrice } from "@/lib/format";
 import { resolveSetImage, resolveCardImage } from "@/lib/data/imageResolver";
+
+// ISR: 6시간 마다 페이지 재생성 (네이버쇼핑 캐시 TTL 와 일치)
+// 발매 30일 이내 박스는 향후 1h 로 축소 가능 (별도 PR)
+export const revalidate = 21600;
 
 export function generateStaticParams() {
   return repository.listSets().map((s) => ({ id: s.id }));
 }
 
-export default function SetDetailPage({ params }: { params: { id: string } }) {
+export default async function SetDetailPage({ params }: { params: { id: string } }) {
   const set = repository.getSet(params.id);
   if (!set) notFound();
 
   const history = repository.getBoxPriceHistory(set.id, 365);
   const prediction = repository.predictBoxPrice(set.id, 90);
-  const observations = repository.getBoxObservations(set.id);
+  // live = 네이버쇼핑 + KREAM + seed 통합 (POKET_USE_LIVE=true 시)
+  const observations = await repository.getBoxObservationsLive(set.id);
+  const aggregated = await repository.getAggregatedBoxPrice(set.id);
   const ev = repository.calculateBoxEV(set.id);
   const cards = repository.getCardsBySetId(set.id);
 
-  const latest = history[history.length - 1]?.avg ?? set.msrpKRW;
+  // 라이브 데이터 우선, 없으면 seed history 의 latest
+  const seedLatest = history[history.length - 1]?.avg ?? set.msrpKRW;
+  const latest = aggregated?.weightedAvg ?? seedLatest;
   const prev = history[Math.max(0, history.length - 5)]?.avg ?? latest;
   const change30d = ((latest - prev) / prev) * 100;
   const vsMsrp = ((latest - set.msrpKRW) / set.msrpKRW) * 100;
+
+  const confLevel = aggregated ? confidenceLabel(aggregated.confidence) : null;
 
   return (
     <div className="space-y-8">
@@ -45,6 +56,14 @@ export default function SetDetailPage({ params }: { params: { id: string } }) {
             <Badge variant="neutral">발매 {formatDate(set.releaseDate)}</Badge>
             <Badge variant="neutral">{set.packsPerBox}팩 / 박스</Badge>
             <Badge variant="neutral">총 {set.totalCards}종</Badge>
+            {aggregated && confLevel && (
+              <Badge
+                variant={confLevel === "high" ? "success" : confLevel === "medium" ? "primary" : "warning"}
+              >
+                <ShieldCheck size={11} className="inline -mt-0.5 mr-1" />
+                실시세 신뢰도 {confLevel === "high" ? "높음" : confLevel === "medium" ? "중간" : "낮음"} ({(aggregated.confidence * 100).toFixed(0)}%)
+              </Badge>
+            )}
           </div>
           {set.references && set.references.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
@@ -65,7 +84,15 @@ export default function SetDetailPage({ params }: { params: { id: string } }) {
       </header>
 
       <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Stat label="박스 시세 (현재)" value={formatPrice(latest)} hint={`정가 ${formatPrice(set.msrpKRW)}`} />
+        <Stat
+          label="박스 시세 (현재)"
+          value={formatPrice(latest)}
+          hint={
+            aggregated
+              ? `${aggregated.count}개 매물 가중평균 · 정가 ${formatPrice(set.msrpKRW)}`
+              : `정가 ${formatPrice(set.msrpKRW)} (실시세 데이터 없음)`
+          }
+        />
         <Stat
           label="정가 대비"
           value={formatPct(vsMsrp)}
@@ -83,6 +110,30 @@ export default function SetDetailPage({ params }: { params: { id: string } }) {
           hint={prediction ? prediction.modelUsed : ""}
         />
       </section>
+
+      {/* 실시세 집계 상세 (POKET_USE_LIVE=true 시) */}
+      {aggregated && (
+        <section className="card">
+          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <h2 className="font-bold text-lg flex items-center gap-2">
+              <TrendingUp size={16} /> 실시세 집계 (다중 소스)
+            </h2>
+            <div className="text-xs text-ink-muted">
+              {aggregated.sources.join(" · ")} · 6시간 캐시
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Stat label="가중평균" value={formatPrice(aggregated.weightedAvg)} />
+            <Stat label="가중중앙값" value={formatPrice(aggregated.weightedMedian)} hint="outlier robust" />
+            <Stat label="최저가" value={formatPrice(aggregated.min)} />
+            <Stat label="최고가" value={formatPrice(aggregated.max)} />
+          </div>
+          <p className="text-xs text-ink-muted mt-3">
+            네이버쇼핑 검색 API 기반 매물 {aggregated.totalCount}건 → IQR outlier {aggregated.outliers.length}건 제외 → 유효 {aggregated.count}건 가중평균.
+            <Link href="/guide/data-sources" className="ml-1 underline">데이터 출처 자세히</Link>
+          </p>
+        </section>
+      )}
 
       <section className="card">
         <div className="flex items-center justify-between mb-3">
